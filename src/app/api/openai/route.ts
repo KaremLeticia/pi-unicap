@@ -1,23 +1,12 @@
 import { Configuration, OpenAIApi } from "openai";
-/**
- * This is a type that defines a type ConverSationStyle using the export keyword.
- * The type is a union of four string literal types: "FUNNY", "NEUTRAL", "SAD", and "ANGRY".
- * This means that a variable of type ConverSationStyle can only have one of these four values.
- */
+
 
 
 export interface IChatGPTPayload {
   prompt: string;
 }
 
-/**
- * Set the personality of AI depending on the ConverSationStyle.
- **/
 
-
-/**
- * A simple function that makes a request to the Azure Open AI API.
- */
 const simpleOpenAIRequest = async (payload: IChatGPTPayload) => {
   // create a new configuration object with the base path set to the Azure OpenAI endpoint
   const configuration = new Configuration({
