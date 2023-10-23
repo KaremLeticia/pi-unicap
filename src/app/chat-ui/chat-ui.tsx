@@ -7,13 +7,11 @@ import Image from "next/image";
 import pavao from '../../app/assets/pavao.png'
 
 export const ChatUI = () => {
-  const [style, setStyle] = useState<ConverSationStyle>("FUNNY");
   const [chatHistory, setChatHistory] = useState<Array<{ user: string; ai: string }>>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const promptChatGPT = async (payload: IChatGPTPayload) => {
     setIsLoading(true);
-    console.log(style);
     const response: Response = await fetch("/api/openai", {
       method: "POST",
       body: JSON.stringify(payload),
