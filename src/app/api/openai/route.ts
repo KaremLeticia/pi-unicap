@@ -26,6 +26,13 @@ const simpleOpenAIRequest = async (payload: IChatGPTPayload) => {
 
   const openai = new OpenAIApi(configuration);
 
+  const apiKey = process.env.AZURE_OPEN_AI_KEY;
+
+if (typeof apiKey !== 'string') {
+  throw new Error('AZURE_OPEN_AI_KEY is not defined or is not a string');
+}
+
+
   const completion = await openai.createChatCompletion(
     {
       model: "gpt-35-turbo", // gpt-35-turbo is the model name which is set as part of the deployment on Azure Open AI
@@ -45,7 +52,7 @@ const simpleOpenAIRequest = async (payload: IChatGPTPayload) => {
     },
     {
       headers: {
-        "api-key": process.env.AZURE_OPEN_AI_KEY, // set the api-key header to the Azure Open AI key
+        "api-key": apiKey, // set the api-key header to the Azure Open AI key
       },
       params: {
         "api-version": "2023-03-15-preview", // set the api-version to the latest version
