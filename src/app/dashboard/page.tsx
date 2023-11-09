@@ -3,6 +3,15 @@ import Card from "@/app/components/Card";
 import Text from "@/app/components/Text";
 import formatarDataHora from "@/app/utils/Date"
 import Head from 'next/head';
+import Link from 'next/link'
+
+const formatText = (texto: string) => {
+  return texto
+    .toLowerCase()
+    .replace(/[^\w\s]/gi, '')
+    .replace(/\s+/g, '-');
+};
+
 
 export default function Dashboard() {
 
@@ -44,7 +53,7 @@ export default function Dashboard() {
       </Head>
       <div className="mb-8">
         <Text size="2xl" weight="semibold" fontFamily="sans" color="black">
-          Nome do aluno
+          Athos 
         </Text>
         <Text size="xl" weight="normal" fontFamily="sans" color="black" >
           {dataFormatada}
@@ -54,12 +63,14 @@ export default function Dashboard() {
       
       <div className="flex flex-col">
         {cardsData.map((card, index) => (
+          <Link href={`/avalie/${card.title}`}>
           <Card
             key={index}
             title={card.title}
             description={card.description}
             status={card.status}
           />
+        </Link>
         ))}
       </div>
     </>

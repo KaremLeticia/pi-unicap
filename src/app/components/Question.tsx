@@ -1,24 +1,42 @@
-"use client"
 import React, { useState } from 'react';
 import Text from './Text';
 
-export default function Question({ titles }: any) {
-  // Create a state to track the user's responses
+interface QuestionProps {
+  titles: string[];
+  onSubmit: (responses: number[], comment: string) => void;
+}
+
+export default function Question({ titles, onSubmit }: QuestionProps) {
   const [responses, setResponses] = useState(titles.map(() => 0));
+  const [comments, setComments] = useState('');
 
-  // Function to handle changes to the user's responses
   const handleResponseChange = (index: number, value: number) => {
-    const newResponses = [...responses];
-    newResponses[index] = value;
-    setResponses(newResponses);
+    setResponses((prevResponses) =>
+      prevResponses.map((prevValue, i) => (i === index ? value : prevValue))
+    );
 
-    // Log the value being saved
     console.log(`Question ${index + 1}: ${value}`);
   };
 
+  const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setComments(e.target.value);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+  
+    onSubmit(responses, comments);
+  
+    setResponses(titles.map(() => 0));
+    setComments('');
+  
+    console.log('Respostas:', responses);
+    console.log('Comentário:', comments);
+  };
+  
   return (
-    <div className="flex flex-col my-8">
-      {titles.map((title: any, index: any) => (
+    <form className="flex flex-col my-8" onSubmit={handleSubmit}>
+      {titles.map((title: string, index: number) => (
         <div key={index}>
           <div className="flex mx-[30%] my-4">
             <Text size="2xl" fontFamily="sans" weight="semibold">
@@ -26,7 +44,7 @@ export default function Question({ titles }: any) {
             </Text>
           </div>
 
-          <form className="flex justify-center items-center gap-8">
+          <div className="flex justify-center items-center gap-8">
             {[5, 4, 3, 2, 1, 0].map((value) => (
               <label key={value}>
                 {value}
@@ -40,9 +58,20 @@ export default function Question({ titles }: any) {
                 />
               </label>
             ))}
-          </form>
+          </div>
         </div>
       ))}
-    </div>
+      <div className="max-w-md mx-auto p-6 bg-white rounded-md shadow-md">
+        <label className="block text-sm font-medium text-gray-700">Comentário:</label>
+        <textarea
+          className="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+          rows={4}
+          placeholder="Digite seu comentário aqui..."
+          value={comments}
+          onChange={handleCommentChange}
+        ></textarea>
+      </div>
+      <button type="submit">Enviar</button>
+    </form>
   );
 }
