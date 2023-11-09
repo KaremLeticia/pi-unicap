@@ -2,21 +2,21 @@
 import { Vertical } from "@/app/components/Charts/Vertical";
 import HeaderSvg from "@/app/components/HeaderSvg";
 
-export default function Chat(){
-  return(
-   <>
-   <div>
-    <HeaderSvg />
-    <div className="grid grid-cols-3 gap-2 m-2">
-      <div>
-      <Vertical />
+export default function Chat() {
+  return (
+    <>
+      <div className="flex flex-col">
+        <div className="hidden lg:block">
+          <HeaderSvg />
+        </div>
+        <div className="flex m-2">
+          <div>
+            <Vertical />
+          </div>
+          <h1>oi2</h1>
+          <h1>oi3</h1>
+        </div>
       </div>
-      <h1>oi2</h1>
-      <h1>oi3</h1>
-
-    </div>
-
-   </div>
-   </>
+    </>
   );
 }

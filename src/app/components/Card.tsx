@@ -3,7 +3,7 @@ import React from 'react';
 interface CardProps {
   title: string;
   description: string;
-  status: 'feito' | 'incompleto' | 'pendente';
+  status: 'feito' | 'incompleto' | 'pendente' | string;
 }
 
 const Card: React.FC<CardProps> = ({ title, description, status }) => {

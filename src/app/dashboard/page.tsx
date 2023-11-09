@@ -9,6 +9,33 @@ export default function Dashboard() {
   const dataAtual = new Date();
   const dataFormatada = formatarDataHora(dataAtual);
 
+  const cardsData = [
+    {
+      title: "Lógica de Programação",
+      description: "SIN1001",
+      status: "feito",
+    },
+    {
+      title: "Inglês aplicado à informática",
+      description: "LET1638",
+      status: "pendente",
+    },
+    {
+      title: "Fundamentos da computação",
+      description: "SIN1002",
+      status: "incompleto",
+    },
+    {
+      title: "Projeto Integrador I",
+      description: "SIN1006",
+      status: "incompleto",
+    },
+    {
+      title: "Introdução à Programação para Web",
+      description: "SIN1004",
+      status: "incompleto",
+    },
+  ];
 
   return (
     <>
@@ -24,10 +51,16 @@ export default function Dashboard() {
         </Text>
       </div>
 
+      
       <div className="flex flex-col">
-        <Card title="Tarefa 1" description="Esta é a descrição da tarefa 1." status="feito" />
-        <Card title="Tarefa 2" description="Esta é a descrição da tarefa 2." status="pendente" />
-        <Card title="Tarefa 3" description="Esta é a descrição da tarefa 3." status="incompleto" />
+        {cardsData.map((card, index) => (
+          <Card
+            key={index}
+            title={card.title}
+            description={card.description}
+            status={card.status}
+          />
+        ))}
       </div>
     </>
   );

@@ -27,7 +27,7 @@ export default function Question({ titles }: any) {
           </div>
 
           <form className="flex justify-center items-center gap-8">
-            {[0, 1, 2, 3, 4, 5].map((value) => (
+            {[5, 4, 3, 2, 1, 0].map((value) => (
               <label key={value}>
                 {value}
                 <input

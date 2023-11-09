@@ -8,7 +8,7 @@ export default function Sidebar() {
   return (
     <aside
       className="
-      flex flex-col items-center bg-default h-screen shrink-0 w-[224px]
+      flex flex-col items-center bg-default min-h-screen  shrink-0 w-[224px]
       max-sm:hidden
       "
     >
