@@ -19,7 +19,7 @@ interface TailwindButtonProps {
 
 const TailwindButton = ({ onClick, children }: TailwindButtonProps) => {
   return (
-    <button onClick={onClick} className="bg-default w-96 h-10 rounded self-center hover:bg-default/90">
+    <button onClick={onClick} className="bg-default w-36 h-10 rounded self-center hover:bg-default/90 text-white">
       {children}
     </button>
   );
@@ -86,7 +86,7 @@ export default function Login() {
               }}
             />
             <FormControlLabel control={<Checkbox />} color="primary" label="Manter conectado" sx={{ color: 'black' }} />
-            <TailwindButton onClick={handleSubmit} children="Acessar" />
+            <TailwindButton onClick={handleSubmit}  children="Acessar" />
             <div>
               <button onClick={openModal}>Abrir Modal</button>
               {isModalOpen && (

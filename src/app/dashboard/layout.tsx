@@ -15,6 +15,7 @@ export default function Layout({children}: any) {
 
         <main
           className={`
+          p-5
           w-full
           max-w-6xl my-12 mx-auto
           max-sm:w-[calc(100%_-_${MobileSidesMargin * 2}px)] max-sm:mt-0
