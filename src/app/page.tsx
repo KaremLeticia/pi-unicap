@@ -1,16 +1,17 @@
 "use client"
 import Image from "next/image";
-import React, { useState, ReactNode } from "react";
+import React, { useState, ReactNode, Dispatch, SetStateAction } from "react";
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import { Lock, Person } from '@mui/icons-material';
 
-import principal from '../app/assets/principal.png'
-import logo from '../app/assets/logo.svg'
+import principal from '../app/assets/principal.png';
+import logo from '../app/assets/logo.svg';
 import { Checkbox, FormControl, FormControlLabel } from "@mui/material";
 import Modal from "./components/Modal";
-
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation";
+import { useUser } from "@/contexts/UserProvider";
+import axios from "axios";
 
 interface TailwindButtonProps {
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
@@ -25,8 +26,15 @@ const TailwindButton = ({ onClick, children }: TailwindButtonProps) => {
   );
 };
 
+
 export default function Login() {
+  const { setUserId } = useUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState<string | undefined>(undefined);
+
+  const router = useRouter();
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -35,21 +43,23 @@ export default function Login() {
   const closeModal = () => {
     setIsModalOpen(false);
   };
-  
 
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('/api/login', {
+        email,
+        password,
+      });
 
-  const router = useRouter();
-  const [input, setInput] = useState('')
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value);
-    console.log('Valor do input:', e.target.value); // Log para verificar o valor do input
+      console.log('Resposta do login:', response.data);
+      setUserId(response.data.userId);
+      router.push('/dashboard');
+    } catch (err: any) {
+      console.error('Erro durante o login:', err.response?.data);
+      setError('Credenciais inválidas.');
+    }
   };
 
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
-  };
 
   return (
     <main className="bg-gray-200 flex justify-center items-center h-screen">
@@ -62,9 +72,10 @@ export default function Login() {
           <FormControl className="space-y-3 mt-4">
             <TextField
               id="outlined-required"
-              label="RA"
-              value={input}
-              onChange={handleInputChange}
+              label="E-mail"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -77,6 +88,8 @@ export default function Login() {
               id="outlined-required"
               label="Senha"
               type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -86,7 +99,7 @@ export default function Login() {
               }}
             />
             <FormControlLabel control={<Checkbox />} color="primary" label="Manter conectado" sx={{ color: 'black' }} />
-            <TailwindButton onClick={handleSubmit}  children="Acessar" />
+            <TailwindButton onClick={handleLogin} children="Acessar" />
             <div>
               <button onClick={openModal}>Abrir Modal</button>
               {isModalOpen && (
@@ -103,5 +116,5 @@ export default function Login() {
         </div>
       </section>
     </main>
-  )
+  );
 }

@@ -4,6 +4,7 @@ import Text from "@/app/components/Text";
 import formatarDataHora from "@/app/utils/Date"
 import Head from 'next/head';
 import Link from 'next/link'
+import { useUser } from "@/contexts/UserProvider";
 
 const formatText = (texto: string) => {
   return texto
@@ -14,6 +15,9 @@ const formatText = (texto: string) => {
 
 
 export default function Dashboard() {
+  const { userId } = useUser();
+
+console.log(useUser, userId)
 
   const dataAtual = new Date();
   const dataFormatada = formatarDataHora(dataAtual);
