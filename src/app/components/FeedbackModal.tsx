@@ -12,6 +12,9 @@ import Radio from '@mui/material/Radio';
 import axios from 'axios';
 import { useUser } from "@/contexts/UserProvider";
 
+
+
+
 interface FeedbackModalProps {
   open: boolean;
   onClose: () => void;
@@ -103,6 +106,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
     if (currentStep === 0) {
       return (
         <Select
+        className='border-default'
           label="Selecione a matéria"
           value={selectedCourse}
           onChange={handleCourseChange}
@@ -130,8 +134,11 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
               value={value.toString()}
               control={<Radio />}
               label={value.toString()}
+              
             />
+            
           ))}
+
         </RadioGroup>
       );
     }
@@ -142,12 +149,14 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 450,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
-    maxWidth: 400,
+    maxWidth: 500,
+    justifyContent: 'center',
+    alignItems: 'center',
   };
 
   return (
@@ -162,12 +171,12 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
           {currentStep === 0 ? 'Selecione a matéria' : titles[currentStep - 1]}
         </Typography>
         <FormControl fullWidth>{renderInputComponent()}</FormControl>
-        <Button onClick={currentStep === 0 ? handleConfirmCourse : handleBackStep} sx={{ mt: 2, mr: 2 }}>
-          {currentStep === 0 ? 'Confirm' : 'Back'}
+        <Button className='bg-default hover:bg-default/90 text-white' onClick={currentStep === 0 ? handleConfirmCourse : handleBackStep} sx={{ mt: 2, mr: 2 }}>
+          {currentStep === 0 ? 'Confirmar' : 'Voltar'}
         </Button>
         {isCourseConfirmed && (
-          <Button onClick={handleNextStep} sx={{ mt: 2 }}>
-            {currentStep === titles.length ? 'Submit' : 'Next'}
+          <Button className='bg-default hover:bg-default/90 text-white'  onClick={handleNextStep} sx={{ mt: 2 }}>
+            {currentStep === titles.length ? 'Confirmar' : 'Próximo'}
           </Button>
         )}
       </Box>

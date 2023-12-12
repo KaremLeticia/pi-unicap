@@ -1,3 +1,4 @@
+// Seu arquivo Vertical.tsx (ou equivalente)
 import React from 'react';
 import {
   Chart as ChartJS,
@@ -9,7 +10,6 @@ import {
   Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import { faker } from '@faker-js/faker';
 
 ChartJS.register(
   CategoryScale,
@@ -20,7 +20,7 @@ ChartJS.register(
   Legend
 );
 
-export const options = {
+const options = {
   responsive: true,
   plugins: {
     legend: {
@@ -28,29 +28,10 @@ export const options = {
     },
     title: {
       display: true,
-      text: 'Chart.js Bar Chart',
     },
   },
 };
 
-const labels = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho'];
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: 'Dataset 1',
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-      backgroundColor: '#7D1F2A',
-    },
-    {
-      label: 'Dataset 2',
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-      backgroundColor: '#0052b4',
-    },
-  ],
-};
-
-export function Vertical() {
-  return <Bar options={options} data={data} />;
-}
+export const Vertical: React.FC<any> = ({ data }) => (
+  <Bar options={options} data={data} />
+);

@@ -29,20 +29,11 @@ const TailwindButton = ({ onClick, children }: TailwindButtonProps) => {
 
 export default function Login() {
   const { setUserId } = useUser();
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | undefined>(undefined);
 
   const router = useRouter();
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
 
   const handleLogin = async () => {
     try {
@@ -100,12 +91,7 @@ export default function Login() {
             />
             <FormControlLabel control={<Checkbox />} color="primary" label="Manter conectado" sx={{ color: 'black' }} />
             <TailwindButton onClick={handleLogin} children="Acessar" />
-            <div>
-              <button onClick={openModal}>Abrir Modal</button>
-              {isModalOpen && (
-                <Modal onClose={closeModal} />
-              )}
-            </div>
+
           </FormControl>
         </div>
         <div className="w-full md:w-1/2 mt-4 md:mt-0 flex items-center justify-center">

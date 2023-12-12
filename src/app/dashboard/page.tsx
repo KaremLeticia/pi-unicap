@@ -131,15 +131,13 @@ export default function Dashboard() {
             <Card
               key={subject.id}
               title={subject.name}
-              description={`Nota: ${subject.rating}`}
-              status="feito"
             />
           </Link>
         ))}
       </div>
 
       <div>
-        <Button onClick={handleOpenModal}>Open modal</Button>
+        <Button className='bg-default hover:bg-default/90 text-white' onClick={handleOpenModal}>Nova avaliação</Button>
         <FeedbackModal
         open={modalOpen}
         onClose={handleCloseModal}
