@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
-import type { User } from '@prisma/client';
+import type { User, Subject } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -30,7 +30,7 @@ export const GET = async (request: Request, { params }: { params: { id: string }
 
 
 export const PATCH = async (request: Request, { params }: { params: { id: string } }) => {
-  const body: User = await request.json();
+  const body: Partial<User & { subjects?: Partial<Subject>[] }> = await request.json();
 
   try {
     const updatedUser = await prisma.user.update({
@@ -40,6 +40,23 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
       data: {
         email: body.email,
         password: body.password,
+        subjects: {
+          upsert: body.subjects?.map((subject: Partial<Subject>) => ({
+            where: { id: subject.id || undefined },
+            update: {
+              rating: subject.rating || [],  // Substitui os ratings existentes pelos novos valores
+            },
+            create: {
+              id: subject.id || undefined,
+              name: subject.name || '',
+              userId: subject.userId || null,
+              rating: subject.rating || [],  // Inclui os ratings se o subject for criado
+            },
+          })),
+        },
+      },
+      include: {
+        subjects: true,
       },
     });
 
@@ -50,6 +67,7 @@ export const PATCH = async (request: Request, { params }: { params: { id: string
     await prisma.$disconnect();
   }
 };
+
 
 export const DELETE = async (request: Request, { params }: { params: { id: string } }) => {
   try {

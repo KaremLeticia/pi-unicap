@@ -52,7 +52,7 @@ export default function Login() {
       });
 
       console.log('Resposta do login:', response.data);
-      setUserId(response.data.userId);
+      setUserId(response.data.id);
       router.push('/dashboard');
     } catch (err: any) {
       console.error('Erro durante o login:', err.response?.data);

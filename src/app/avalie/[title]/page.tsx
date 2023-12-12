@@ -13,19 +13,18 @@ const titles = [
   "1.7 Utilizou recursos adequados ao ensino das disciplinas.",
   "1.8 Apresentou avaliações coerentes com os conteúdos ministrados.",
   "1.9 Apresentou um bom relacionamento com a turma e proporcionou um clima de respeito mútuo e ético.",
-  "2.0 Informações adicionais, observações ou sugestões (Opcional)."
 ];
 
 export default function Page({ params }:
   { params: { title: string } }) {
 
 
-    const handleFormSubmit = (responses: number[]) => {
-      console.log('Respostas:', responses);
-      console.log('Comentário:', );
-    };
-  
-  
+  const handleFormSubmit = (responses: number[]) => {
+    console.log('Respostas:', responses);
+    console.log('Comentário:',);
+  };
+
+
 
   return (
     <section>
@@ -37,7 +36,7 @@ export default function Page({ params }:
       </div>
       <div>
         <Question titles={titles} onSubmit={handleFormSubmit} />
-       
+
       </div>
     </section>
   );
