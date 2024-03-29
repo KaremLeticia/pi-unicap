@@ -7,11 +7,11 @@ import { Lock, Person } from '@mui/icons-material';
 
 import principal from '../app/assets/principal.png';
 import logo from '../app/assets/logo.svg';
-import { Checkbox, FormControl, FormControlLabel } from "@mui/material";
-import Modal from "./components/Modal";
+import { FormControl } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/contexts/UserProvider";
 import axios from "axios";
+import { Input } from "@/components/ui/input";
 
 interface TailwindButtonProps {
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
@@ -20,7 +20,7 @@ interface TailwindButtonProps {
 
 const TailwindButton = ({ onClick, children }: TailwindButtonProps) => {
   return (
-    <button onClick={onClick} className="bg-default w-36 h-10 rounded self-center hover:bg-default/90 text-white">
+    <button onClick={onClick} className="bg-default w-full h-10 rounded self-center hover:bg-default/90 text-white">
       {children}
     </button>
   );
@@ -61,37 +61,9 @@ export default function Login() {
             alt="logo unicap"
           />
           <FormControl className="space-y-3 mt-4">
-            <TextField
-              id="outlined-required"
-              label="E-mail"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Person />
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <TextField
-              id="outlined-required"
-              label="Senha"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Lock />
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <FormControlLabel control={<Checkbox />} color="primary" label="Manter conectado" sx={{ color: 'black' }} />
+            <Input placeholder="E-mail" type="email"/>
+            <Input placeholder="Senha" type="password"/>
             <TailwindButton onClick={handleLogin} children="Acessar" />
-
           </FormControl>
         </div>
         <div className="w-full md:w-1/2 mt-4 md:mt-0 flex items-center justify-center">
