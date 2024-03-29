@@ -8,15 +8,17 @@ interface UserContextProps {
 interface UserContextData {
   userId: string | null;
   setUserId: Dispatch<SetStateAction<string | null>>;
+  setUserToken: Dispatch<SetStateAction<string | null>>; // Adiciona setUserToken à interface
 }
 
 const UserContext = createContext<UserContextData | undefined>(undefined);
 
 export const UserProvider: React.FC<UserContextProps> = ({ children }) => {
   const [userId, setUserId] = useState<string | null>(null);
+  const [userToken, setUserToken] = useState<string | null>(null); // Inicializa o estado do token
 
   return (
-    <UserContext.Provider value={{ userId, setUserId }}>
+    <UserContext.Provider value={{ userId, setUserId, setUserToken }}> {/* Adiciona setUserToken ao value */}
       {children}
     </UserContext.Provider>
   );

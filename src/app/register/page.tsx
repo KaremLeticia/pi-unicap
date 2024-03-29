@@ -27,30 +27,7 @@ const TailwindButton = ({ onClick, children }: TailwindButtonProps) => {
 };
 
 
-export default function Login() {
-  const { setUserId } = useUser();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | undefined>(undefined);
-
-  const router = useRouter();
-
-  const handleLogin = async () => {
-    try {
-      const response = await axios.post('/api/login', {
-        email,
-        password,
-      });
-
-      console.log('Resposta do login:', response.data);
-      setUserId(response.data.id);
-      router.push('/dashboard');
-    } catch (err: any) {
-      console.error('Erro durante o login:', err.response?.data);
-      setError('Credenciais inválidas.');
-    }
-  };
-
+export default function Register() {
 
   return (
     <main className="bg-gray-200 flex justify-center items-center h-screen">

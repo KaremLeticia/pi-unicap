@@ -35,6 +35,7 @@
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.363.0",
     "next": "13.5.4",
+    "next-auth": "^4.24.7",
     "openai": "^3.2.1",
     "phosphor-icons": "^1.4.2",
     "postcss": "8.4.31",
