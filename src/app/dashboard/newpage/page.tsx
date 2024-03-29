@@ -1,3 +1,4 @@
+"use client"
 import Link from "next/link"
 import {
   Activity,
@@ -44,11 +45,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-
-
-export const iframeHeight = "825px"
-
-export const containerClassName = "w-full h-full"
 
 export default function Dashboard() {
   return (
