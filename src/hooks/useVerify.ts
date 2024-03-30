@@ -28,10 +28,10 @@ const useVerifyRole = (token: string): void => {
       console.log('Role:', role); // Log da função do usuário
       if (role === 'ADMIN') {
         console.log('Redirecionando para /dashboard'); // Log do redirecionamento
-        router.push('/dashboard');
+        router.push('/dashboard/admin');
       } else if (role === 'STUDENT') {
         console.log('Redirecionando para /review'); // Log do redirecionamento
-        router.push('/review');
+        router.push('/dashboard');
       } else {
         console.log('Acesso negado');
       }

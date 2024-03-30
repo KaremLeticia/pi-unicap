@@ -41,10 +41,10 @@ export default function Login() {
       // Verifique a role do usuário e redirecione para a página apropriada
       if (decodedToken.role === 'ADMIN') {
         console.log('Redirecionando para /dashboard');
-        router.push('/dashboard/newpage');
+        router.push('/dashboard/admin');
       } else if (decodedToken.role === 'STUDENT') {
         console.log('Redirecionando para /review');
-        router.push('/review');
+        router.push('/dashboard');
       } else {
         console.log('Acesso negado');
       }

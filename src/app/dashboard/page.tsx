@@ -10,6 +10,7 @@ import { useUser } from "@/contexts/UserProvider";
 import Button from '@mui/material/Button';
 import FeedbackModal from '../components/FeedbackModal';
 import MultiStepForm from "../components/MultiStepForm";
+import ReviewDashboard from "../components/Review/Index";
 
 const titles = [
   "1.0 Qual matéria",
@@ -125,27 +126,7 @@ export default function Dashboard() {
         </Text>
       </div>
 
-      <div className="flex flex-col">
-        {userData?.subjects.map((subject) => (
-          <Link key={subject.id} href={`/avalie/${subject.name}`}>
-            <Card
-              key={subject.id}
-              title={subject.name}
-            />
-          </Link>
-        ))}
-      </div>
-
-      <div>
-        <Button className='bg-default hover:bg-default/90 text-white' onClick={handleOpenModal}>Nova avaliação</Button>
-        <FeedbackModal
-        open={modalOpen}
-        onClose={handleCloseModal}
-        onSubmit={handleSubmitFeedback}
-        title="Título do Modal"
-        courses={['Lógica de Programação', 'Inglês aplicado à informática', 'Fundamentos da computação', 'Introdução à Programação para Web', 'Projeto Integrador I']} 
-      />
-      </div>
+    <ReviewDashboard />
     </>
   );
 }
