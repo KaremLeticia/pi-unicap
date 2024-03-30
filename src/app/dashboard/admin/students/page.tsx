@@ -56,7 +56,7 @@ export default function Orders() {
                   <TableHead className="w-[64px]"></TableHead>
                   <TableHead className="w-[140px]">ID</TableHead>
                   <TableHead className="w-[180px]">Nome</TableHead>
-                  <TableHead>Email</TableHead>
+                  <TableHead>E-mail</TableHead>
                   <TableHead className="w-[140px]">RA</TableHead>
                   <TableHead className="w-[164px]">Escola</TableHead>
                   <TableHead className="w-[132px]"></TableHead>

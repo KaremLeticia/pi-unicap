@@ -9,6 +9,7 @@ import principal from '../app/assets/principal.png';
 import { useRouter } from "next/navigation";
 import jwt from 'jsonwebtoken'; // Importe jwt para decodificar o token
 import { useUser } from '@/contexts/UserProvider';
+import { Button } from '@/components/ui/button';
 
 interface LoginResponse {
   token: string;
@@ -40,7 +41,7 @@ export default function Login() {
       // Verifique a role do usuário e redirecione para a página apropriada
       if (decodedToken.role === 'ADMIN') {
         console.log('Redirecionando para /dashboard');
-        router.push('/dashboard/sent');
+        router.push('/dashboard/newpage');
       } else if (decodedToken.role === 'STUDENT') {
         console.log('Redirecionando para /review');
         router.push('/review');
@@ -55,6 +56,11 @@ export default function Login() {
     }
   };
 
+  const handleRegister = async () => {
+    router.push('/register');
+  }
+  
+  
   return (
     <main className="bg-gray-200 flex justify-center items-center h-screen">
       <section className="w-full h-screen bg-white md:w-1/2  md:flex ">
@@ -68,6 +74,7 @@ export default function Login() {
             <Input placeholder="Senha" type="password" value={password} onChange={(e: any) => setPassword(e.target.value)} />
             <button onClick={handleLogin} className="bg-default w-full h-10 rounded self-center hover:bg-default/90 text-white">Acessar</button>
           </FormControl>
+          <Button onClick={handleRegister} variant='ghost'>Não possui cadastro?{'\u00A0'}<span className='underline'>{`${'\n'} Cadastre-se`}</span></Button>
         </div>
         <div className="w-full md:w-1/2 mt-4 md:mt-0 flex items-center justify-center">
           <Image

@@ -88,7 +88,7 @@ export function CardsCreateAccount() {
             <Label htmlFor="password">Senha</Label>
             <Input id="password" type="password" onChange={handleChange} />
           </div>
-          <div className="grid gap-3 mt-2">
+          <div className="grid gap-3 mt-2 mb-4">
             <Label htmlFor="select-school">Escola</Label>
             <Select
               onValueChange={(value) => {
@@ -120,6 +120,46 @@ export function CardsCreateAccount() {
                     <div className="grid gap-0.5">
                       <span className="font-medium text-foreground">
                         Comunicação
+                      </span>
+                    </div>
+                  </div>
+                </SelectItem>
+                <SelectItem value="Ciências Jurídicas" onSelect={() => handleSchoolChange("Ciências Jurídicas")}>
+                  <div className="flex items-start gap-3 text-muted-foreground">
+                    <PenTool className="size-5" />
+                    <div className="grid gap-0.5">
+                      <span className="font-medium text-foreground">
+                      Ciências Jurídicas
+                      </span>
+                    </div>
+                  </div>
+                </SelectItem>
+                <SelectItem value="Gestão, Economia e Política" onSelect={() => handleSchoolChange("Gestão, Economia e Política")}>
+                  <div className="flex items-start gap-3 text-muted-foreground">
+                    <Landmark className="size-5" />
+                    <div className="grid gap-0.5">
+                      <span className="font-medium text-foreground">
+                      Gestão, Economia e Política
+                      </span>
+                    </div>
+                  </div>
+                </SelectItem>
+                <SelectItem value="Educação e Humanidades" onSelect={() => handleSchoolChange("Educação e Humanidades")}>
+                  <div className="flex items-start gap-3 text-muted-foreground">
+                    <BookOpen className="size-5" />
+                    <div className="grid gap-0.5">
+                      <span className="font-medium text-foreground">
+                      Educação e Humanidades
+                      </span>
+                    </div>
+                  </div>
+                </SelectItem>
+                <SelectItem value="Saúde e Ciências da Vida" onSelect={() => handleSchoolChange("Saúde e Ciências da Vida")}>
+                  <div className="flex items-start gap-3 text-muted-foreground">
+                    <BriefcaseMedical className="size-5" />
+                    <div className="grid gap-0.5">
+                      <span className="font-medium text-foreground">
+                      Saúde e Ciências da Vida
                       </span>
                     </div>
                   </div>
