@@ -29,6 +29,9 @@ export default function Login() {
 
       console.log('Resposta do login:', response.data);
       setUserToken(response.data.token); // Armazena o token no contexto do usuário
+      setUserToken(response.data.token); // Armazena o token no contexto do usuário
+      localStorage.setItem('userToken', response.data.token); // Armazena o token no localStorage
+
       console.log('Token armazenado:', response.data.token); // Log do token armazenado
 
       // Decodifique o token para obter a role do usuário
@@ -37,7 +40,7 @@ export default function Login() {
       // Verifique a role do usuário e redirecione para a página apropriada
       if (decodedToken.role === 'ADMIN') {
         console.log('Redirecionando para /dashboard');
-        router.push('/dashboard');
+        router.push('/dashboard/sent');
       } else if (decodedToken.role === 'STUDENT') {
         console.log('Redirecionando para /review');
         router.push('/review');
