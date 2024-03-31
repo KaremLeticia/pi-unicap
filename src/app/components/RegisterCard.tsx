@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { BookOpen, BriefcaseMedical, Landmark, PenTool, Rocket, Tv } from "lucide-react"
+import { BookOpen, BriefcaseMedical, Landmark, Loader2, PenTool, Rocket, Tv } from "lucide-react"
 
 export function CardsCreateAccount() {
   const [formData, setFormData] = useState({
@@ -24,6 +24,8 @@ export function CardsCreateAccount() {
     studentRegister: '',
     school: ''
   });
+  const [loading, setLoading] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
   const handleChange = (e: any) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -32,23 +34,27 @@ export function CardsCreateAccount() {
   const [selectedSchool, setSelectedSchool] = useState('');
 
   const handleSchoolChange = (value: any) => {
-    setSelectedSchool(value); // Atualizar o estado selectedSchool
-    console.log('Escola selecionada:', value); // Adicionar um log para mostrar a escola selecionada
+    setSelectedSchool(value);
+    console.log('Escola selecionada:', value);
   };
-
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    if (selectedSchool === '') { // Verificar selectedSchool em vez de formData.school
+    if (selectedSchool === '') {
       console.error('Por favor, selecione uma escola.');
       return;
     }
     try {
-      const updatedFormData = { ...formData, school: selectedSchool }; // Usar selectedSchool em vez de formData.school
+      setLoading(true);
+      const updatedFormData = { ...formData, school: selectedSchool };
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_PROD_BASE_URL}/users/register`, updatedFormData);
-      console.log(process.env.NEXT_PUBLIC_BACKEND_PROD_BASE_URL)
+      setLoading(false);
       console.log('Resposta da API:', response.data);
+      if (response.status === 200) {
+        setAlertMessage("CADASTRADO");
+      }
     } catch (error) {
+      setLoading(false);
       console.error('Erro ao enviar os dados para a API:', error);
     }
   };
@@ -169,11 +175,18 @@ export function CardsCreateAccount() {
               </SelectContent>
             </Select>
           </div>
-          <CardFooter>
-            <Button type="submit" className="w-full">Criar conta</Button>
+       <CardFooter>
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Criar conta"}
+            </Button>
           </CardFooter>
         </form>
       </CardContent>
+      {alertMessage && (
+        <div className="bg-green-500 text-white p-4 fixed bottom-0 right-0 m-4">
+          {alertMessage}
+        </div>
+      )}
     </Card>
   );
 }

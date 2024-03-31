@@ -77,8 +77,9 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { Subject } from "@mui/icons-material"
-import React, { useEffect, useState } from "react"
+import React, { Suspense, useEffect, useState } from "react"
 import axios from "axios"
+import Loading from "./loading"
 
 interface SchoolData {
   name: string;
@@ -148,12 +149,13 @@ export default function ReviewDashboard() {
   }, []);
     
   if (!userData) {
-    return <div>Carregando...</div>;
+    return <Loading />
   }
 
   
 
   return (
+    
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
         {userData && (
@@ -170,6 +172,7 @@ export default function ReviewDashboard() {
                   </div>
                 </div>
                 <TabsContent value="week">
+
                   <Card className="bg-white">
                     <CardHeader className="px-7">
                       <CardTitle>Avaliações</CardTitle>

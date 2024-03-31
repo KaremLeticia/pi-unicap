@@ -11,6 +11,7 @@ import Button from '@mui/material/Button';
 import FeedbackModal from '../components/FeedbackModal';
 import MultiStepForm from "../components/MultiStepForm";
 import ReviewDashboard from "../components/Review/Index";
+import Loading from "../components/Review/loading";
 
 const titles = [
   "1.0 Qual matéria",
@@ -125,7 +126,6 @@ export default function Dashboard() {
           {dataFormatada}
         </Text>
       </div>
-
     <ReviewDashboard />
     </>
   );

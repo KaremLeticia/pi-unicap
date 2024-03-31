@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import jwt from 'jsonwebtoken'; // Importe jwt para decodificar o token
 import { useUser } from '@/contexts/UserProvider';
 import { Button } from '@/components/ui/button';
+import { Loader2 } from 'lucide-react';
 
 interface LoginResponse {
   token: string;
@@ -21,10 +22,12 @@ export default function Login() {
   const router = useRouter(); // Instancie o useRouter
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false); // Estado para controlar o carregamento
   const [error, setError] = useState<string | undefined>(undefined);
 
   const handleLogin = async () => {
     try {
+      setLoading(true); // Ative o estado de carregamento
       const formData = { email, password };
       const response = await axios.post<LoginResponse>(`${process.env.NEXT_PUBLIC_BACKEND_PROD_BASE_URL}/users/sessions`, formData);
 
@@ -53,6 +56,8 @@ export default function Login() {
     } catch (err: any) {
       console.error('Erro durante o login:', err.response?.data);
       setError('Credenciais inválidas.');
+    } finally {
+      setLoading(false); // Desative o estado de carregamento independentemente do resultado
     }
   };
 
@@ -72,7 +77,9 @@ export default function Login() {
           <FormControl className="space-y-3 mt-4">
             <Input placeholder="E-mail" type="email" value={email} onChange={(e: any) => setEmail(e.target.value)} />
             <Input placeholder="Senha" type="password" value={password} onChange={(e: any) => setPassword(e.target.value)} />
-            <button onClick={handleLogin} className="bg-default w-full h-10 rounded self-center hover:bg-default/90 text-white">Acessar</button>
+            <button onClick={handleLogin} className="bg-default w-full h-10 rounded self-center hover:bg-default/90 text-white relative">
+              {loading ? <Loader2 className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 h-4 w-4 animate-spin" /> : "Acessar"}
+            </button>
           </FormControl>
           <Button onClick={handleRegister} variant='ghost'>Não possui cadastro?{'\u00A0'}<span className='underline'>{`${'\n'} Cadastre-se`}</span></Button>
         </div>
