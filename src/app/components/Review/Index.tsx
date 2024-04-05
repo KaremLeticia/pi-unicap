@@ -80,6 +80,7 @@ import { Subject } from "@mui/icons-material"
 import React, { Suspense, useEffect, useState } from "react"
 import axios from "axios"
 import Loading from "./loading"
+import { ReviewSheet } from "../ReviewSheet"
 
 interface SchoolData {
   name: string;
@@ -195,6 +196,7 @@ export default function ReviewDashboard() {
                           <TableRow>
                             <TableCell>
                               <div className="font-medium">{userData.school.name}</div>
+                              <ReviewSheet />
                               <div className="hidden text-sm text-muted-foreground md:inline">
                                 liam@example.com
                               </div>
