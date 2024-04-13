@@ -27,32 +27,26 @@ export default function Login() {
 
   const handleLogin = async () => {
     try {
-      setLoading(true); // Ative o estado de carregamento
+      setLoading(true);
       const formData = { email, password };
       const response = await axios.post<LoginResponse>(`${process.env.NEXT_PUBLIC_BACKEND_PROD_BASE_URL}/users/sessions`, formData);
 
-      console.log('Resposta do login:', response.data);
       setUserToken(response.data.token); // Armazena o token no contexto do usuário
       setUserToken(response.data.token); // Armazena o token no contexto do usuário
       localStorage.setItem('userToken', response.data.token); // Armazena o token no localStorage
 
-      console.log('Token armazenado:', response.data.token); // Log do token armazenado
 
       // Decodifique o token para obter a role do usuário
       const decodedToken = jwt.decode(response.data.token) as { role: string };
 
       // Verifique a role do usuário e redirecione para a página apropriada
       if (decodedToken.role === 'ADMIN') {
-        console.log('Redirecionando para /dashboard');
         router.push('/dashboard/admin');
       } else if (decodedToken.role === 'STUDENT') {
-        console.log('Redirecionando para /review');
         router.push('/dashboard');
       } else {
         console.log('Acesso negado');
       }
-
-      // Outras lógicas de redirecionamento ou manipulação de estado após o login
     } catch (err: any) {
       console.error('Erro durante o login:', err.response?.data);
       setError('Credenciais inválidas.');

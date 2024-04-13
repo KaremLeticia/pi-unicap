@@ -114,20 +114,13 @@ export default function Dashboard() {
 
   // JSX structure
   return (
-    <>
+    <div className="h-screen w-screen flex items-center">
       <Head>
         <title>Sistema de Avaliação • UNICAP</title>
       </Head>
       <div className="mb-8">
       
-        <Text size="2xl" weight="semibold" fontFamily="sans" color="black">
-          {userData?.name || 'Usuário'}
-        </Text>
-        <Text size="xl" weight="normal" fontFamily="sans" color="black">
-          {dataFormatada}
-         
-        </Text>
-        <Button className='bg-default hover:bg-default/90 text-white' onClick={handleOpenModal}>Nova avaliação</Button>
+
 
  <FeedbackModal
         open={modalOpen}
@@ -139,6 +132,6 @@ export default function Dashboard() {
       />
       </div>
     <ReviewDashboard />
-    </>
+    </div>
   );
 }

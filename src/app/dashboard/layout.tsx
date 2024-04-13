@@ -9,7 +9,7 @@ export default function Layout({children}: any) {
 
   return (
     <>
-      <div className="flex max-sm:flex-col bg-bground">
+      <div className="flex max-sm:flex-col bg-muted/40">
         <MobileNavBar />
         <Sidebar />
 
