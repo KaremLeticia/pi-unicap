@@ -19,7 +19,7 @@ const titles = [
 ];
 
 export function ReviewSheet() {
-  const [selectedValues, setSelectedValues] = useState({}); // Estado para armazenar os valores selecionados
+  const [selectedValues, setSelectedValues] = useState<{ [key: string]: any }>({});
 
   const handleRadioChange = (title: string, value: string) => {
     setSelectedValues(prevValues => {
@@ -70,7 +70,7 @@ function RadioGroupDemo({ value, onChange }: any) {
   return (
     <RadioGroup className='flex space-x-4 justify-center mb-4' value={value} onChange={onChange}>
       <div className="flex items-center space-x-2">
-        <RadioGroupItem value={null} id="0" />
+        <RadioGroupItem value="0" id="0" />
         <Label htmlFor="0">0</Label>
       </div>
       <div className="flex items-center space-x-2">
