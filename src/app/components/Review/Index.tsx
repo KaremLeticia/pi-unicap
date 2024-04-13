@@ -81,6 +81,7 @@ import React, { Suspense, useEffect, useState } from "react"
 import axios from "axios"
 import Loading from "./loading"
 import { ReviewSheet } from "../ReviewSheet"
+import FeedbackModal from "../FeedbackModal"
 
 interface SchoolData {
   name: string;
@@ -88,8 +89,9 @@ interface SchoolData {
 }
 
 interface SubjectData {
-name: any;
-id: any;
+  Subject: any;
+  name: any;
+  id: any;
 }
 
 interface CourseData {
@@ -110,12 +112,13 @@ interface UserData {
 
 export default function ReviewDashboard() {
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [userSubjects, setUserSubjects] = useState<any[]>([]); // Inicialize com um array vazio
+  const [userSubjects, setUserSubjects] = useState<SubjectData[]>([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [currentSubject, setCurrentSubject] = useState<SubjectData | null>(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        // Obtém os dados do usuário
         const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_PROD_BASE_URL}/users/me`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("userToken")}`,
@@ -124,40 +127,44 @@ export default function ReviewDashboard() {
         });
         const user = response.data.user;
         setUserData(user);
-  
-        // Armazena o ID do usuário
+
         const userId = user.id;
-  
-        // Certifique-se de que userId não está vazio
+
         if (!userId) {
           console.error("Erro: ID do usuário não encontrado.");
           return;
         }
-  
-        // Obtém os subjects do usuário usando o ID armazenado
-        const subjectsResponse = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_PROD_BASE_URL}/users/subjectsbyuser/${userId}`);
-        const userSubjectsData = subjectsResponse.data; // Renomeie a variável para evitar conflito de nome
-        console.log(userSubjectsData); // Verifique se os dados estão sendo retornados corretamente
 
-        // Atualize o estado com os subjects obtidos
+        const subjectsResponse = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_PROD_BASE_URL}/users/subjectsbyuser/${userId}`);
+        const userSubjectsData: SubjectData[] = subjectsResponse.data;
         setUserSubjects(userSubjectsData);
       } catch (error) {
         console.error("Erro ao buscar os dados do usuário:", error);
       }
     };
-  
+
     fetchUserData();
   }, []);
-    
+
+  const handleOpenModal = (subject: SubjectData) => {
+    setCurrentSubject(subject);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setCurrentSubject(null);
+    setModalOpen(false);
+  };
+
   if (!userData) {
-    return <Loading />
+    return <Loading />;
   }
 
-  
 
   return (
-    
+
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
+
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
         {userData && (
           <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
@@ -200,9 +207,9 @@ export default function ReviewDashboard() {
                               <div className="hidden text-sm text-muted-foreground md:inline">
                                 liam@example.com
                               </div>
-                            </TableCell>                  
+                            </TableCell>
                             <TableCell className="hidden sm:table-cell">
-                    
+
                             </TableCell>
                             <TableCell className="text-right">
                               <Badge className="text-xs" variant="secondary">
@@ -213,18 +220,30 @@ export default function ReviewDashboard() {
                           </TableRow>
                         </TableBody>
                         <TableBody>
-  {userSubjects.map((subjectGroup, index) => (
-    <React.Fragment key={index}>
-      {subjectGroup.Subject.map((subject: any, subIndex: any) => (
-        <TableRow key={subIndex}>
-          <TableCell>{subject.name}</TableCell>
-          <TableCell>{subject.courseId}</TableCell>
-
-        </TableRow>
-      ))}
-    </React.Fragment>
-  ))}
-</TableBody>
+                          {userSubjects.map((subjectGroup, index) => (
+                            <React.Fragment key={index}>
+                              {subjectGroup.Subject.map((subject: any, subIndex: any) => (
+                                <TableRow key={subIndex}>
+                                  <TableCell>{subject.name}</TableCell>
+                                  <TableCell>{subject.id}</TableCell>
+                                  <TableCell>
+                      <Button className="bg-default hover:bg-default/90 text-white" onClick={() => handleOpenModal(subject)}>
+                        Nova avaliação
+                      </Button>
+                      <FeedbackModal
+                        open={modalOpen && currentSubject?.id === subject.id}
+                        onClose={handleCloseModal}
+                        onSubmit={(scores) => console.log('Feedback data:', { subjectId: subject.id, userId: userData.id, scores })}
+                        title={`Avaliação de ${subject.name}`}
+                        subjectId={subject.id}
+                        userId={userData.id}
+                      />
+                    </TableCell>
+                                </TableRow>
+                              ))}
+                            </React.Fragment>
+                          ))}
+                        </TableBody>
 
                       </Table>
                     </CardContent>
@@ -371,6 +390,6 @@ export default function ReviewDashboard() {
         )}
       </div>
     </div>
-     )
-  }
+  )
+}
 

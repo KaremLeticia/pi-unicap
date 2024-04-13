@@ -3,24 +3,19 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import axios from 'axios';
-import { useUser } from "@/contexts/UserProvider";
-
-
-
 
 interface FeedbackModalProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (course: string, rating: any) => void;
+  onSubmit: (subjectId: string, userId: string, scores: { sentence: any; score: any }) => void;
   title: string;
-  courses: string[];
+  userId: string;
+  subjectId: string;
 }
 
 const titles = [
@@ -40,61 +35,72 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
   onClose,
   onSubmit,
   title,
-  courses,
+  subjectId,
+  userId,
 }: FeedbackModalProps) => {
-  const [selectedCourse, setSelectedCourse] = useState<string>('');
   const [currentStep, setCurrentStep] = useState<number>(0);
-  const [isCourseConfirmed, setCourseConfirmed] = useState<boolean>(false);
-  const [ratings, setRatings] = useState<string[]>(Array(titles.length).fill(''));
-  const { userId } = useUser();
-
-  const handleCourseChange = (event: SelectChangeEvent<string>) => {
-    setSelectedCourse(event.target.value);
-  };
-
-  const handleConfirmCourse = () => {
-    if (selectedCourse) {
-      setCurrentStep((prevStep) => prevStep + 1);
-      setCourseConfirmed(true);
-    }
-  };
+  const [ratings, setRatings] = useState<any[]>(Array(titles.length).fill(''));
 
   const handleRatingChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newRatings = [...ratings];
-    newRatings[currentStep - 1] = event.target.value;
-    setRatings(newRatings);
+    // Converta o valor de event.target.value para um número
+    const newValue = parseFloat(event.target.value);
+    // Verifique se o valor convertido é um número válido
+    if (!isNaN(newValue)) {
+      // Atribua o valor convertido a newRatings[currentStep]
+      newRatings[currentStep] = newValue;
+      setRatings(newRatings);
+    }
   };
-
-  const handleSubmitFeedback = async () => {
+  
+  const handleSubmitFeedback = async (feedbackData: { scores: { sentence: string; score: any }[], subjectId: string, userId: string }) => {
     try {
-      console.log('Submitting feedback:', { course: selectedCourse, ratings });
-  
-      if (userId) {
-        const response = await axios.post('/api/subjects', {
-          name: selectedCourse,
-          rating: ratings,
-          userId: userId,
-        });
-  
-        console.log('API response:', response.data);
-        console.log(userId);
-        onSubmit(selectedCourse, ratings);
-        onClose();
-      } else {
-        console.error('User ID is not available.');
-      }
+      // Desestruture diretamente os valores de feedbackData
+      const { subjectId, userId } = feedbackData;
+
+      // Mapeie os ratings para o formato correto
+      const formattedScores = ratings.map((rating, index) => ({
+        sentence: titles[index], // Use o título correspondente como a sentença
+        score: rating, // O próprio rating é o score
+      }));
+
+      // Envie os dados para a API
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_PROD_BASE_URL}/users/rating`, {
+        scores: formattedScores,
+        subjectId,
+        userId,
+      });
+
+      // Exiba a resposta da API no console
+      console.log('API response:', response.data);
+
+      // Realize qualquer outra lógica necessária após o envio do feedback
+
     } catch (error) {
-      console.error('Error submitting feedback:', error);
+      // Trate qualquer erro que ocorra durante o envio do feedback
+      console.error('Erro ao enviar feedback:', error);
     }
-  };
-    
-  const handleNextStep = () => {
-    if (currentStep < titles.length) {
-      setCurrentStep((prevStep) => prevStep + 1);
-    } else {
-      handleSubmitFeedback();
-    }
-  };
+};
+
+const handleNextStep = () => {
+  if (currentStep < titles.length - 1) {
+    setCurrentStep((prevStep) => prevStep + 1);
+  } else {
+    // Mapeie os ratings para o formato correto
+    const formattedScores = ratings.map((rating, index) => ({
+      sentence: titles[index], // Use o título correspondente como a sentença
+      score: parseInt(rating), // O próprio rating é o score
+    }));
+
+    // Passe os scores formatados para handleSubmitFeedback
+    handleSubmitFeedback({
+      scores: formattedScores, // Passando os scores formatados
+      subjectId, // Passando o subjectId
+      userId, // Passando o userId
+    });
+  }
+};
+
 
   const handleBackStep = () => {
     if (currentStep > 0) {
@@ -103,45 +109,24 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
   };
 
   const renderInputComponent = () => {
-    if (currentStep === 0) {
-      return (
-        <Select
-        className='border-default'
-          label="Selecione a matéria"
-          value={selectedCourse}
-          onChange={handleCourseChange}
-          sx={{ mt: 2 }}
-        >
-          {courses.map((course) => (
-            <MenuItem key={course} value={course}>
-              {course}
-            </MenuItem>
-          ))}
-        </Select>
-      );
-    } else {
-      return (
-        <RadioGroup
-          row
-          aria-label="rating"
-          name="rating"
-          value={ratings[currentStep - 1]}
-          onChange={handleRatingChange}
-        >
-          {[0, 1, 2, 3, 4, 5].map((value) => (
-            <FormControlLabel
-              key={value}
-              value={value.toString()}
-              control={<Radio />}
-              label={value.toString()}
-              
-            />
-            
-          ))}
-
-        </RadioGroup>
-      );
-    }
+    return (
+      <RadioGroup
+        row
+        aria-label="rating"
+        name="rating"
+        value={ratings[currentStep]}
+        onChange={handleRatingChange}
+      >
+        {[0, 1, 2, 3, 4, 5].map((value) => (
+          <FormControlLabel
+            key={value}
+            value={value.toString()}
+            control={<Radio />}
+            label={value.toString()}
+          />
+        ))}
+      </RadioGroup>
+    );
   };
 
   const style = {
@@ -168,16 +153,32 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
     >
       <Box sx={style}>
         <Typography id="feedback-modal-title" variant="h6" component="h2">
-          {currentStep === 0 ? 'Selecione a matéria' : titles[currentStep - 1]}
+          {titles[currentStep]}
         </Typography>
         <FormControl fullWidth>{renderInputComponent()}</FormControl>
-        <Button className='bg-default hover:bg-default/90 text-white' onClick={currentStep === 0 ? handleConfirmCourse : handleBackStep} sx={{ mt: 2, mr: 2 }}>
-          {currentStep === 0 ? 'Confirmar' : 'Voltar'}
+        <Button className='bg-default hover:bg-default/90 text-white' onClick={currentStep === 0 ? handleBackStep : () => { }} sx={{ mt: 2, mr: 2 }}>
+          Voltar
         </Button>
-        {isCourseConfirmed && (
-          <Button className='bg-default hover:bg-default/90 text-white'  onClick={handleNextStep} sx={{ mt: 2 }}>
-            {currentStep === titles.length ? 'Confirmar' : 'Próximo'}
+        {currentStep !== titles.length - 1 && (
+          <Button className='bg-default hover:bg-default/90 text-white' onClick={handleNextStep} sx={{ mt: 2 }}>
+            Próximo
           </Button>
+        )}
+        {currentStep === titles.length - 1 && (
+          <Button
+            className='bg-default hover:bg-default/90 text-white'
+            onClick={() => {
+              const formattedScores = ratings.map((rating, index) => ({
+                sentence: titles[index], // Use o título correspondente como a sentença
+                score: rating, // O próprio rating é o score
+              }));
+              handleSubmitFeedback({ scores: formattedScores, subjectId, userId })
+            }}
+            sx={{ mt: 2 }}
+          >
+            Confirmar
+          </Button>
+
         )}
       </Box>
     </Modal>

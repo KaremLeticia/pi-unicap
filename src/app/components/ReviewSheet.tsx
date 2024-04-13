@@ -24,7 +24,7 @@ export function ReviewSheet() {
   const handleRadioChange = (title: string, value: string) => {
     setSelectedValues(prevValues => {
       const updatedValues = { ...prevValues, [title]: value };
-      console.log(`Title: ${title}, Value: ${value}`); // Log para mostrar o título e o valor selecionado
+      console.log(`Title: ${title}, Value: ${value}`); 
       return updatedValues;
     });
   };
