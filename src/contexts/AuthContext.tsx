@@ -44,9 +44,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
       // Redirecione para a página apropriada com base na role do usuário
       if (decodedToken.role === 'ADMIN') {
-        router.push('/dashboard/admin');
-      } else if (decodedToken.role === 'STUDENT') {
         router.push('/dashboard');
+      } else if (decodedToken.role === 'STUDENT') {
+        router.push('/home');
       } else {
         console.log('Acesso negado');
       }

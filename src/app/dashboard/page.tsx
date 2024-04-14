@@ -1,137 +1,369 @@
 "use client"
-import Card from "@/app/components/Card";
-import Text from "@/app/components/Text";
-import formatarDataHora from "@/app/utils/Date";
-import Head from 'next/head';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useUser } from "@/contexts/UserProvider";
-import Button from '@mui/material/Button';
-import FeedbackModal from '../components/FeedbackModal';
-import MultiStepForm from "../components/MultiStepForm";
-import ReviewDashboard from "../components/Review/Index";
-import Loading from "../components/Review/loading";
-
-const titles = [
-  "1.0 Qual matéria",
-  "1.1 Foi assídua e pontual.",
-  "1.2 Demonstrou conhecimento atualizado e domínio do conteúdo das disciplinas.",
-  "1.3 Promoveu a integração da teoria com a prática.",
-  "1.4 Demonstrou conhecimento atualizado e domínio do conteúdo das disciplinas.",
-  "1.5 Demonstrou clareza na exposição do conteúdo das disciplinas.",
-  "1.6 Utilizou metodologias inovadoras ativas.",
-  "1.7 Utilizou recursos adequados ao ensino das disciplinas.",
-  "1.8 Apresentou avaliações coerentes com os conteúdos ministrados.",
-  "1.9 Apresentou um bom relacionamento com a turma e proporcionou um clima de respeito mútuo e ético.",
-];
-
-const questions = [
-  "1.0 Qual matéria",
-  "1.1 Foi assídua e pontual.",
-  "1.2 Demonstrou conhecimento atualizado e domínio do conteúdo das disciplinas.",
-  "1.3 Promoveu a integração da teoria com a prática.",
-  "1.4 Demonstrou conhecimento atualizado e domínio do conteúdo das disciplinas.",
-  "1.5 Demonstrou clareza na exposição do conteúdo das disciplinas.",
-  "1.6 Utilizou metodologias inovadoras ativas.",
-  "1.7 Utilizou recursos adequados ao ensino das disciplinas.",
-  "1.8 Apresentou avaliações coerentes com os conteúdos ministrados.",
-  "1.9 Apresentou um bom relacionamento com a turma e proporcionou um clima de respeito mútuo e ético.",
-];
+import Link from "next/link"
+import {
+  Activity,
+  ArrowUpRight,
+  CircleUser,
+  CreditCard,
+  DollarSign,
+  Menu,
+  Package2,
+  Search,
+  Users,
+} from "lucide-react"
 
 
-const courses = ['Course A', 'Course B', 'Course C'];
-interface Subject {
-  id: number;
-  name: string;
-  rating: number;
-  userId: string;
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Input } from "@/components/ui/input"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import UsersBySchoolChart from "@/app/components/Charts/usersBySchool"
+import { useEffect, useState } from "react"
+import axios from "axios"
+import jwt from 'jsonwebtoken'; // Importe jwt para decodificar o token
+import Admin from "../page"
+
+interface UserWithRatings {
+  totalUsersWithRatings: any;
 }
 
-interface UserData {
-  id: string;
-  name: string | null;
-  email: string;
-  password: string;
-  subjects: Subject[];
-}
 
-// Dashboard component
 export default function Dashboard() {
-  // State variables
-  const { userId } = useUser();
-  const [userData, setUserData] = useState<UserData | null>(null);
-  const [currentModal, setCurrentModal] = useState(0);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [feedbackData, setFeedbackData] = useState<
-    { course: string; rating: string; title: string }[]
-  >([]);
-  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [usersTotal, setUsersTotal] = useState<number>(0); // Initialize usersTotal as a number
+  const [userWithRatings, setUserWithRatings] = useState<UserWithRatings>({ totalUsersWithRatings: 0 });
 
-  // Function to open the modal
-  const handleOpenModal = () => {
-    setModalOpen(true);
-  };
 
-  // Function to close the modal
-  const handleCloseModal = () => {
-    setModalOpen(false);
-  };
 
-  // Function to submit feedback
-  const handleSubmitFeedback = (course: string, rating: string) => {
-    setFeedbackData((prevData) => [
-      ...prevData,
-      { course, rating, title: titles[currentModal] },
-    ]);
-
-    if (currentModal < titles.length - 1) {
-      setCurrentModal(currentModal + 1);
-    } else {
-      setModalOpen(false);
-    }
-  };
-
-  // Fetch user data effect
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchUsersTotal = async () => {
       try {
-        const response = await axios.get(`/api/users/${userId}`);
-        setUserData(response.data);
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_PROD_BASE_URL}/admin/totalusers`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('userToken')}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        setUsersTotal(response.data.totalUsers);
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error('Erro ao buscar o total de usuários:', error);
       }
     };
 
-    if (userId) {
-      fetchUserData();
-    }
-  }, [userId]);
+    const fetchUserWithRatings = async () => {
+      try {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_PROD_BASE_URL}/admin/userwithratings`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('userToken')}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        setUserWithRatings(response.data);
+      } catch (error) {
+        console.error('Erro ao buscar os usuários com avaliações:', error);
+      }
+    };
 
-  // Format current date
-  const dataAtual = new Date();
-  const dataFormatada = formatarDataHora(dataAtual);
+    fetchUsersTotal();
+    fetchUserWithRatings();
+  }, []);
 
-  // JSX structure
+  useEffect(() => {
+    console.log('Total de usuários:', usersTotal);
+  }, [usersTotal]);
+
+  useEffect(() => {
+    console.log('Usuários com avaliações:', userWithRatings);
+  }, [userWithRatings]);
+
   return (
-    <div className="h-screen w-screen flex items-center">
-      <Head>
-        <title>Sistema de Avaliação • UNICAP</title>
-      </Head>
-      <div className="mb-8">
-      
+    <div className="flex min-h-screen w-full flex-col">
+      <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+        <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
 
-
- <FeedbackModal
-        open={modalOpen}
-        onClose={handleCloseModal}
-        onSubmit={handleSubmitFeedback}
-        title=""
-        subjectId=""
-        userId=""
-      />
-      </div>
-    <ReviewDashboard />
+          <Card slot="1">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                Alunos cadastrados
+              </CardTitle>
+              <Users className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{usersTotal}</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Participação Total</CardTitle>
+              <CreditCard className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{userWithRatings.totalUsersWithRatings}</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Avaliações enviadas</CardTitle>
+              <Activity className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">+573</div>
+              <p className="text-xs text-muted-foreground">
+                +201 since last hour
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+        <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
+          <Card className="xl:col-span-2">
+            <CardHeader className="flex flex-row items-center">
+              <div className="grid gap-2">
+                <CardTitle>Alunos Cadastrados</CardTitle>
+                <CardDescription>
+                  Últimos alunos cadastrados
+                </CardDescription>
+              </div>
+              <Button asChild size="sm" className="ml-auto gap-1">
+                <Link href="/dashboard/admin/students">
+                  Ver todos
+                  <ArrowUpRight className="h-4 w-4" />
+                </Link>
+              </Button>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Customer</TableHead>
+                    <TableHead className="hidden xl:table-column">
+                      Type
+                    </TableHead>
+                    <TableHead className="hidden xl:table-column">
+                      Status
+                    </TableHead>
+                    <TableHead className="hidden xl:table-column">
+                      Date
+                    </TableHead>
+                    <TableHead className="text-right">Amount</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow>
+                    <TableCell>
+                      <div className="font-medium">Liam Johnson</div>
+                      <div className="hidden text-sm text-muted-foreground md:inline">
+                        liam@example.com
+                      </div>
+                    </TableCell>
+                    <TableCell className="hidden xl:table-column">
+                      Sale
+                    </TableCell>
+                    <TableCell className="hidden xl:table-column">
+                      <Badge className="text-xs" variant="outline">
+                        Approved
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
+                      2023-06-23
+                    </TableCell>
+                    <TableCell className="text-right">$250.00</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>
+                      <div className="font-medium">Olivia Smith</div>
+                      <div className="hidden text-sm text-muted-foreground md:inline">
+                        olivia@example.com
+                      </div>
+                    </TableCell>
+                    <TableCell className="hidden xl:table-column">
+                      Refund
+                    </TableCell>
+                    <TableCell className="hidden xl:table-column">
+                      <Badge className="text-xs" variant="outline">
+                        Declined
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
+                      2023-06-24
+                    </TableCell>
+                    <TableCell className="text-right">$150.00</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>
+                      <div className="font-medium">Noah Williams</div>
+                      <div className="hidden text-sm text-muted-foreground md:inline">
+                        noah@example.com
+                      </div>
+                    </TableCell>
+                    <TableCell className="hidden xl:table-column">
+                      Subscription
+                    </TableCell>
+                    <TableCell className="hidden xl:table-column">
+                      <Badge className="text-xs" variant="outline">
+                        Approved
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
+                      2023-06-25
+                    </TableCell>
+                    <TableCell className="text-right">$350.00</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>
+                      <div className="font-medium">Emma Brown</div>
+                      <div className="hidden text-sm text-muted-foreground md:inline">
+                        emma@example.com
+                      </div>
+                    </TableCell>
+                    <TableCell className="hidden xl:table-column">
+                      Sale
+                    </TableCell>
+                    <TableCell className="hidden xl:table-column">
+                      <Badge className="text-xs" variant="outline">
+                        Approved
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
+                      2023-06-26
+                    </TableCell>
+                    <TableCell className="text-right">$450.00</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>
+                      <div className="font-medium">Liam Johnson</div>
+                      <div className="hidden text-sm text-muted-foreground md:inline">
+                        liam@example.com
+                      </div>
+                    </TableCell>
+                    <TableCell className="hidden xl:table-column">
+                      Sale
+                    </TableCell>
+                    <TableCell className="hidden xl:table-column">
+                      <Badge className="text-xs" variant="outline">
+                        Approved
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
+                      2023-06-27
+                    </TableCell>
+                    <TableCell className="text-right">$550.00</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+          <UsersBySchoolChart />
+          <Card>
+            <CardHeader>
+              <CardTitle>Recent Sales</CardTitle>
+            </CardHeader>
+            <CardContent className="grid gap-8">
+              <div className="flex items-center gap-4">
+                <Avatar className="hidden h-9 w-9 sm:flex">
+                  <AvatarImage src="/avatars/01.png" alt="Avatar" />
+                  <AvatarFallback>OM</AvatarFallback>
+                </Avatar>
+                <div className="grid gap-1">
+                  <p className="text-sm font-medium leading-none">
+                    Olivia Martin
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    olivia.martin@email.com
+                  </p>
+                </div>
+                <div className="ml-auto font-medium">+$1,999.00</div>
+              </div>
+              <div className="flex items-center gap-4">
+                <Avatar className="hidden h-9 w-9 sm:flex">
+                  <AvatarImage src="/avatars/02.png" alt="Avatar" />
+                  <AvatarFallback>JL</AvatarFallback>
+                </Avatar>
+                <div className="grid gap-1">
+                  <p className="text-sm font-medium leading-none">
+                    Jackson Lee
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    jackson.lee@email.com
+                  </p>
+                </div>
+                <div className="ml-auto font-medium">+$39.00</div>
+              </div>
+              <div className="flex items-center gap-4">
+                <Avatar className="hidden h-9 w-9 sm:flex">
+                  <AvatarImage src="/avatars/03.png" alt="Avatar" />
+                  <AvatarFallback>IN</AvatarFallback>
+                </Avatar>
+                <div className="grid gap-1">
+                  <p className="text-sm font-medium leading-none">
+                    Isabella Nguyen
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    isabella.nguyen@email.com
+                  </p>
+                </div>
+                <div className="ml-auto font-medium">+$299.00</div>
+              </div>
+              <div className="flex items-center gap-4">
+                <Avatar className="hidden h-9 w-9 sm:flex">
+                  <AvatarImage src="/avatars/04.png" alt="Avatar" />
+                  <AvatarFallback>WK</AvatarFallback>
+                </Avatar>
+                <div className="grid gap-1">
+                  <p className="text-sm font-medium leading-none">
+                    William Kim
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    will@email.com
+                  </p>
+                </div>
+                <div className="ml-auto font-medium">+$99.00</div>
+              </div>
+              <div className="flex items-center gap-4">
+                <Avatar className="hidden h-9 w-9 sm:flex">
+                  <AvatarImage src="/avatars/05.png" alt="Avatar" />
+                  <AvatarFallback>SD</AvatarFallback>
+                </Avatar>
+                <div className="grid gap-1">
+                  <p className="text-sm font-medium leading-none">
+                    Sofia Davis
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    sofia.davis@email.com
+                  </p>
+                </div>
+                <div className="ml-auto font-medium">+$39.00</div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </main>
     </div>
-  );
+  )
 }

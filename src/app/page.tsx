@@ -43,7 +43,7 @@ export default function Login() {
       if (decodedToken.role === 'ADMIN') {
         router.push('/dashboard/admin');
       } else if (decodedToken.role === 'STUDENT') {
-        router.push('/dashboard');
+        router.push('/home');
       } else {
         console.log('Acesso negado');
       }
