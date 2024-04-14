@@ -49,6 +49,7 @@ import UsersBySchoolChart from "@/app/components/Charts/usersBySchool"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import jwt from 'jsonwebtoken'; // Importe jwt para decodificar o token
+import Admin from "../page"
 
 interface UserWithRatings {
   totalUsersWithRatings: any;
@@ -144,14 +145,14 @@ export default function Dashboard() {
           <Card className="xl:col-span-2">
             <CardHeader className="flex flex-row items-center">
               <div className="grid gap-2">
-                <CardTitle>Transactions</CardTitle>
+                <CardTitle>Alunos Cadastrados</CardTitle>
                 <CardDescription>
-                  Recent transactions from your store.
+                  Últimos alunos cadastrados
                 </CardDescription>
               </div>
               <Button asChild size="sm" className="ml-auto gap-1">
-                <Link href="#">
-                  View All
+                <Link href="/dashboard/admin/students">
+                  Ver todos
                   <ArrowUpRight className="h-4 w-4" />
                 </Link>
               </Button>

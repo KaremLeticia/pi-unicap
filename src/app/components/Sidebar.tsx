@@ -32,17 +32,17 @@ export default function Sidebar() {
           <Link href="/dashboard/admin" className="flex bg-default w-20 h-20 focus:ring focus:ring-white justify-center items-center rounded-md">
             <House className="text-white focus:text-default" size={32} />
           </Link>
-
-          <Link href="/dashboard/admin/playground" className="flex bg-default w-20 h-20 focus:ring focus:ring-white hover:bg-default/40 justify-center items-center rounded-md">
-            <ChatCenteredText className="text-white" size={32} />
-          </Link>
-
           <Link href="/dashboard/admin/overview" className="flex bg-default w-20 h-20 focus:ring focus:ring-white hover:bg-default/40 justify-center items-center rounded-md">
             <UsersThree className="text-white " size={32} />
           </Link>
           <Link href="/dashboard/admin/students" className="flex bg-default w-20 h-20 focus:ring focus:ring-white hover:bg-default/40 justify-center items-center rounded-md">
             <GraduationCap className="text-white" size={32} />
           </Link>
+          <Link href="/dashboard/admin/playground" className="flex bg-default w-20 h-20 focus:ring focus:ring-white hover:bg-default/40 justify-center items-center rounded-md">
+            <ChatCenteredText className="text-white" size={32} />
+          </Link>
+
+
 
         </nav>
 

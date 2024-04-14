@@ -8,7 +8,7 @@ export default function Layout({children}: any) {
   const MobileSidesMargin = 12;
 
   return (
-    <>
+    <div>
       <div className="flex max-sm:flex-col bg-muted/40">
         <MobileNavBar />
         <Sidebar />
@@ -25,6 +25,6 @@ export default function Layout({children}: any) {
           {children}
         </main>
       </div>
-    </>
+    </div>
   );
 }
