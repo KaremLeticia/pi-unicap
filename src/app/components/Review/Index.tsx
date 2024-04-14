@@ -167,90 +167,98 @@ export default function ReviewDashboard() {
 
 
   return (
-<div className=" flex items-center justify-center">
+    <div className=" flex items-center justify-center">
 
-    <div className="flex flex-col bg-muted/40">
+      <div className="flex flex-col bg-muted/40">
+
         <Text size="2xl" weight="semibold" fontFamily="sans" color="black">
-          {userData?.name || 'Usuário'}
+          Olá, {userData?.name || 'Usuário'}!
+
         </Text>
+
         <Text size="xl" weight="normal" fontFamily="sans" color="black">
           {dataFormatada}
-         
+
         </Text>
-      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
-        {userData && (
-          <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
-            <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
-              <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
+        <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+          {userData && (
+            <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
+              <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
+                <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
 
-              </div>
-              <Tabs defaultValue="week">
-                <div className="flex items-center">
-
-                  <div className="ml-auto flex items-center gap-2">
-
-                  </div>
                 </div>
-                <TabsContent value="week">
+                <Tabs defaultValue="week">
+                  <div className="flex items-center">
 
-                  <Card className="bg-white">
-                    <CardHeader className="px-7">
-                      <CardTitle>Avaliações</CardTitle>
-                      <CardDescription>
-                        Últimas avaliações disponíveis
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Matéria</TableHead>
-                            <TableHead className="hidden md:table-cell">
-                              Curso
-                            </TableHead>
-                            <TableHead className="hidden md:table-cell">Avalie</TableHead>
-                            
-                            <TableHead className="text-right">Comentário</TableHead>
-                          </TableRow>
-                        </TableHeader>
+                    <div className="ml-auto flex items-center gap-2">
 
-                        <TableBody>
-                          {userSubjects.map((subjectGroup, index) => (
-                            <React.Fragment key={index}>
-                              {subjectGroup.Subject.map((subject: any, subIndex: any) => (
-                                <TableRow key={subIndex}>
-                                  <TableCell>{subject.name}</TableCell>
-                                  <TableCell>{subject.id}</TableCell>
-                                  <TableCell>
-                      <Button className="bg-default hover:bg-default/90 text-white" onClick={() => handleOpenModal(subject)}>
-                        Nova avaliação
-                      </Button>
-                      <FeedbackModal
-                        open={modalOpen && currentSubject?.id === subject.id}
-                        onClose={handleCloseModal}
-                        onSubmit={(scores) => console.log('Feedback data:', { subjectId: subject.id, userId: userData.id, scores })}
-                        title={`Avaliação de ${subject.name}`}
-                        subjectId={subject.id}
-                        userId={userData.id}
-                      />
-                    </TableCell>
-                                </TableRow>
-                              ))}
-                            </React.Fragment>
-                          ))}
-                        </TableBody>
+                    </div>
+                  </div>
+                  <TabsContent value="week">
 
-                      </Table>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-              </Tabs>
-            </div>
-        
-          </main>
-        )}
+                    <Card className="bg-white">
+                      <CardHeader className="px-7">
+                        <CardTitle>Avaliações</CardTitle>
+                        <CardDescription>
+                          Últimas avaliações disponíveis
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <Table>
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead>Matéria</TableHead>
+                              <TableHead className="hidden md:table-cell">
+                                Curso
+                              </TableHead>
+                              <TableHead className="hidden md:table-cell">Avalie</TableHead>
+                              <div>
+                                <TableHead className="text-right flex flex-col">
+                                  Comentário
+                                  <span className="opacity-60">(opcional)</span>
+                                </TableHead>
+                              </div>
+
+                            </TableRow>
+                          </TableHeader>
+
+                          <TableBody>
+                            {userSubjects.map((subjectGroup, index) => (
+                              <React.Fragment key={index}>
+                                {subjectGroup.Subject.map((subject: any, subIndex: any) => (
+                                  <TableRow key={subIndex}>
+                                    <TableCell>{subject.name}</TableCell>
+                                    <TableCell>{subject.id}</TableCell>
+                                    <TableCell>
+                                      <Button className="bg-default hover:bg-default/90 text-white" onClick={() => handleOpenModal(subject)}>
+                                        Nova avaliação
+                                      </Button>
+                                      <FeedbackModal
+                                        open={modalOpen && currentSubject?.id === subject.id}
+                                        onClose={handleCloseModal}
+                                        onSubmit={(scores) => console.log('Feedback data:', { subjectId: subject.id, userId: userData.id, scores })}
+                                        title={`Avaliação de ${subject.name}`}
+                                        subjectId={subject.id}
+                                        userId={userData.id}
+                                      />
+                                    </TableCell>
+                                  </TableRow>
+                                ))}
+                              </React.Fragment>
+                            ))}
+                          </TableBody>
+
+                        </Table>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+                </Tabs>
+              </div>
+
+            </main>
+          )}
+        </div>
       </div>
-    </div>
     </div>
   )
 }
