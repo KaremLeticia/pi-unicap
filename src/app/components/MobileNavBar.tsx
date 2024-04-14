@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import LogoUnicap from "../assets/logo-branca-unicap 1.png";
 import { House, Bell, Info, ChartPieSlice, GearSix, SignOut, X, List } from "@phosphor-icons/react";
@@ -8,6 +8,14 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 
 export function MobileNavBar() {
     const [isMobileNavBarOpen, setIsMobileNavBarOpen] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
+
+    useEffect(() => {
+        const token = localStorage.getItem('userToken');
+        const decodedToken = token ? jwt.decode(token) as JwtPayload : null;
+        const isAdmin = decodedToken?.role === 'ADMIN';
+        setIsAdmin(isAdmin);
+    }, []);
 
     function handleOpenNavBar() {
         setIsMobileNavBarOpen(true);
@@ -16,11 +24,6 @@ export function MobileNavBar() {
     function handleCloseNavBar() {
         setIsMobileNavBarOpen(false);
     }
-
-    // Simular token JWT para demonstração
-    const token = localStorage.getItem('userToken');
-    const decodedToken = token ? jwt.decode(token) as JwtPayload : null;
-    const isAdmin = decodedToken?.role === 'ADMIN';
 
     if (!isAdmin) {
         return null; // Não renderiza nada se o usuário não for um administrador
