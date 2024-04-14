@@ -6,13 +6,12 @@ import Link from "next/link";
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
 export default function Sidebar() {
-  // Simular token JWT para demonstração
-  const token = localStorage.getItem('userToken');
-  const decodedToken = token ? jwt.decode(token) as JwtPayload : null;
-  const isAdmin = decodedToken?.role === 'ADMIN';
+  // Verifica se está no lado do cliente antes de acessar o localStorage
+  const isAdmin = typeof window !== 'undefined' && localStorage.getItem('userToken');
+  const decodedToken = isAdmin ? jwt.decode(isAdmin) as JwtPayload : null;
+  const isAdminUser = decodedToken?.role === 'ADMIN';
 
-
-  if (!isAdmin) {
+  if (!isAdminUser) {
     return null; // Não renderiza nada se o usuário não for um administrador
   }
 
@@ -36,7 +35,7 @@ export default function Sidebar() {
           <Info className="text-white" size={32} />
         </Link>
         
-        {isAdmin && (
+        {isAdminUser && (
           <Link href="/dashboard/admin" className="flex bg-default w-20 h-20 focus:ring focus:ring-white hover:bg-default/40 justify-center items-center rounded-md">
             <Bell className="text-white" size={32} />
           </Link>
