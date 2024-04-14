@@ -50,6 +50,8 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import jwt from 'jsonwebtoken'; // Importe jwt para decodificar o token
 import Admin from "../page"
+import { useRole } from "@/contexts/RoleContext"
+import { notFound, useRouter } from "next/navigation"
 
 interface UserWithRatings {
   totalUsersWithRatings: any;
@@ -57,10 +59,10 @@ interface UserWithRatings {
 
 
 export default function Dashboard() {
+  const { role } = useRole();
   const [usersTotal, setUsersTotal] = useState<number>(0); // Initialize usersTotal as a number
   const [userWithRatings, setUserWithRatings] = useState<UserWithRatings>({ totalUsersWithRatings: 0 });
-
-
+  const router = useRouter() 
 
   useEffect(() => {
     const fetchUsersTotal = async () => {
@@ -102,6 +104,12 @@ export default function Dashboard() {
   useEffect(() => {
     console.log('Usuários com avaliações:', userWithRatings);
   }, [userWithRatings]);
+
+  useEffect(() => {
+    if (role !== 'ADMIN') {
+      return notFound()
+    }
+  }, [role, router]);
 
   return (
     <div className="flex min-h-screen w-full flex-col">

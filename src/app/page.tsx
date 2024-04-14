@@ -11,11 +11,15 @@ import jwt from 'jsonwebtoken'; // Importe jwt para decodificar o token
 import { useUser } from '@/contexts/UserProvider';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
+import { useRole } from '@/contexts/RoleContext';
 
 interface LoginResponse {
   token: string;
   // Outros campos da resposta, se houverem
 }
+
+type Role = 'ADMIN' | 'STUDENT';
+
 
 export default function Login() {
   const { setUserId, setUserToken } = useUser();
@@ -24,20 +28,20 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false); // Estado para controlar o carregamento
   const [error, setError] = useState<string | undefined>(undefined);
+  const { setRole } = useRole();
 
   const handleLogin = async () => {
     try {
+
       setLoading(true);
       const formData = { email, password };
       const response = await axios.post<LoginResponse>(`${process.env.NEXT_PUBLIC_BACKEND_PROD_BASE_URL}/users/sessions`, formData);
 
       setUserToken(response.data.token); // Armazena o token no contexto do usuário
-      setUserToken(response.data.token); // Armazena o token no contexto do usuário
-      localStorage.setItem('userToken', response.data.token); // Armazena o token no localStorage
-
-
       // Decodifique o token para obter a role do usuário
       const decodedToken = jwt.decode(response.data.token) as { role: string };
+      setRole(decodedToken.role as Role);
+      localStorage.setItem('userToken', response.data.token); // Armazena o token no localStorage
 
       // Verifique a role do usuário e redirecione para a página apropriada
       if (decodedToken.role === 'ADMIN') {
