@@ -13,9 +13,19 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { BookOpen, BriefcaseMedical, Landmark, Loader2, PenTool, Rocket, Tv } from "lucide-react"
+import { BookOpen, BriefcaseMedical, Landmark, Loader2, PenTool, Rocket, Tv, Ban, Star } from "lucide-react"
+import { useRouter } from 'next/navigation';
+
+const AlertDialogDemo = ({ message, variant }: { message: string, variant: "default" | "destructive" }) => (
+  <div className={`bg-white rounded border-2 border-slate-900 text-black p-4 fixed bottom-0 right-0 m-4`}>
+    {variant === 'destructive' ? <Ban className="inline-block mr-2" /> : <Star className="inline-block mr-2" />}
+    {message}
+  </div>
+);
+
 
 export function CardsCreateAccount() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -32,6 +42,10 @@ export function CardsCreateAccount() {
   };
 
   const [selectedSchool, setSelectedSchool] = useState('');
+
+  const handleBackLogin = (e: any) => {
+    router.push('/')
+  };
 
   const handleSchoolChange = (value: any) => {
     setSelectedSchool(value);
@@ -50,9 +64,7 @@ export function CardsCreateAccount() {
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_PROD_BASE_URL}/users/register`, updatedFormData);
       setLoading(false);
       console.log('Resposta da API:', response.data);
-      if (response.status === 200) {
-        setAlertMessage("CADASTRADO");
-      }
+        setAlertMessage("Conta criada, faça login!");      
     } catch (error) {
       setLoading(false);
       console.error('Erro ao enviar os dados para a API:', error);
@@ -175,17 +187,17 @@ export function CardsCreateAccount() {
               </SelectContent>
             </Select>
           </div>
-       <CardFooter>
+       <CardFooter className='flex flex-col'>
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Criar conta"}
             </Button>
+            <Button onClick={handleBackLogin} variant='ghost'>{'\u00A0'}<span className='underline'>{`${'\n'} Voltar para Login`}</span></Button>
+
           </CardFooter>
         </form>
       </CardContent>
       {alertMessage && (
-        <div className="bg-green-500 text-white p-4 fixed bottom-0 right-0 m-4">
-          {alertMessage}
-        </div>
+        <AlertDialogDemo message={alertMessage} variant="default" />
       )}
     </Card>
   );
