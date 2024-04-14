@@ -1,3 +1,4 @@
+"use client"
 import {
   Bird,
   Book,
@@ -50,8 +51,19 @@ import {
   TooltipTrigger,
   TooltipProvider
 } from "@/components/ui/tooltip"
+import { useRole } from "@/contexts/RoleContext"
+import { notFound, useRouter } from "next/navigation"
+import { useEffect } from "react"
 
 export default function Admin() {
+  const { role } = useRole();
+  const router = useRouter() 
+
+  useEffect(() => {
+    if (role !== 'ADMIN') {
+      return notFound()
+    }
+  }, [role, router]);
   return (
     <div className="grid h-screen w-full pl-[56px]">
 

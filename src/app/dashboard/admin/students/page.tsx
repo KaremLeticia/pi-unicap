@@ -13,10 +13,20 @@ import { OrderTableRow } from './order-table-row';
 import { OrderTableFilters } from './order-table-filters';
 import { Pagination } from '@/components/ui/pagination';
 import { format } from 'date-fns';
+import { notFound, useRouter } from 'next/navigation';
+import { useRole } from '@/contexts/RoleContext';
 
 export default function Orders() {
   const [users, setUsers] = useState<any[]>([]);
+  const { role } = useRole();
+  const router = useRouter() 
 
+  useEffect(() => {
+    if (role !== 'ADMIN') {
+      return notFound()
+    }
+  }, [role, router]);
+  
   useEffect(() => {
     const fetchUsers = async () => {
       try {

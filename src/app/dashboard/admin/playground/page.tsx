@@ -33,6 +33,9 @@ import { presets } from "./data/presets"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { Card } from "@/components/ui/card"
+import { notFound } from "next/navigation"
+import { useRouter } from "next/navigation"
+import { useRole } from "@/contexts/RoleContext"
 
 
 export default function PlaygroundPage() {
@@ -41,6 +44,15 @@ export default function PlaygroundPage() {
   const [comentario, setComentario] = useState('');
 
   const [resultado, setResultado] = useState([]);
+  const { role } = useRole();
+  const router = useRouter() 
+
+  useEffect(() => {
+    if (role !== 'ADMIN') {
+      return notFound()
+    }
+  }, [role, router]);
+
 
   const handleSubmit = async (comentario: string) => {
     try {
