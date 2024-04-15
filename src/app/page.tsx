@@ -31,14 +31,17 @@ export default function Login() {
   const { setRole } = useRole();
 
 
+
   const handleLogin = async () => {
     try {
+      setLoading(true);
       const formData = { email, password };
       const response = await axios.post<LoginResponse>(`${process.env.NEXT_PUBLIC_BACKEND_PROD_BASE_URL}/users/sessions`, formData);
 
-      setRole(response.data.role); // Defina a role no contexto do usuário
-      console.log(response.data.role)
-      // Redirecione com base na role do usuário
+      setUserToken(response.data.token);
+      setRole(response.data.role);
+      localStorage.setItem('userToken', response.data.token);
+
       if (response.data.role === 'ADMIN') {
         router.push('/dashboard/admin');
       } else if (response.data.role === 'STUDENT') {
@@ -50,9 +53,9 @@ export default function Login() {
       console.error('Erro durante o login:', err.response?.data);
       setError('Credenciais inválidas.');
     } finally {
+      setLoading(false);
     }
   };
-
   const handleRegister = async () => {
     router.push('/register');
   }
