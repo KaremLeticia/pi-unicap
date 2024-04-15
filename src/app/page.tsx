@@ -15,7 +15,7 @@ import { useRole } from '@/contexts/RoleContext';
 
 interface LoginResponse {
   token: string;
-  // Outros campos da resposta, se houverem
+  role: Role;
 }
 
 type Role = 'ADMIN' | 'STUDENT';
@@ -30,23 +30,18 @@ export default function Login() {
   const [error, setError] = useState<string | undefined>(undefined);
   const { setRole } = useRole();
 
+
   const handleLogin = async () => {
     try {
-
-      setLoading(true);
       const formData = { email, password };
       const response = await axios.post<LoginResponse>(`${process.env.NEXT_PUBLIC_BACKEND_PROD_BASE_URL}/users/sessions`, formData);
 
-      setUserToken(response.data.token); // Armazena o token no contexto do usuário
-      // Decodifique o token para obter a role do usuário
-      const decodedToken = jwt.decode(response.data.token) as { role: string };
-      setRole(decodedToken.role as Role);
-      localStorage.setItem('userToken', response.data.token); // Armazena o token no localStorage
-
-      // Verifique a role do usuário e redirecione para a página apropriada
-      if (decodedToken.role === 'ADMIN') {
+      setRole(response.data.role); // Defina a role no contexto do usuário
+      console.log(response.data.role)
+      // Redirecione com base na role do usuário
+      if (response.data.role === 'ADMIN') {
         router.push('/dashboard/admin');
-      } else if (decodedToken.role === 'STUDENT') {
+      } else if (response.data.role === 'STUDENT') {
         router.push('/home');
       } else {
         console.log('Acesso negado');
@@ -55,7 +50,6 @@ export default function Login() {
       console.error('Erro durante o login:', err.response?.data);
       setError('Credenciais inválidas.');
     } finally {
-      setLoading(false); // Desative o estado de carregamento independentemente do resultado
     }
   };
 
