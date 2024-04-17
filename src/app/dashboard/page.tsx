@@ -105,11 +105,6 @@ export default function Dashboard() {
     console.log('Usuários com avaliações:', userWithRatings);
   }, [userWithRatings]);
 
-  useEffect(() => {
-    if (role !== 'ADMIN') {
-      return notFound()
-    }
-  }, [role, router]);
 
   return (
     <div className="flex min-h-screen w-full flex-col">

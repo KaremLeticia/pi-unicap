@@ -21,11 +21,6 @@ export default function Orders() {
   const { role } = useRole();
   const router = useRouter() 
 
-  useEffect(() => {
-    if (role !== 'ADMIN') {
-      return notFound()
-    }
-  }, [role, router]);
   
   useEffect(() => {
     const fetchUsers = async () => {

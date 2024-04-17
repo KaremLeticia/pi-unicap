@@ -2,6 +2,7 @@
 import { MobileNavBar } from '@/app/components/MobileNavBar';
 import Sidebar from '@/app/components/Sidebar';
 
+
 export default function Layout({children}: any) {
   const SideBarWidth = 224;
   const SidesMargin = 48;

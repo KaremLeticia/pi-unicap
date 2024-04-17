@@ -47,11 +47,7 @@ export default function PlaygroundPage() {
   const { role } = useRole();
   const router = useRouter() 
 
-  useEffect(() => {
-    if (role !== 'ADMIN') {
-      return notFound()
-    }
-  }, [role, router]);
+
 
 
   const handleSubmit = async (comentario: string) => {

@@ -59,11 +59,7 @@ export default function Admin() {
   const { role } = useRole();
   const router = useRouter() 
 
-  useEffect(() => {
-    if (role !== 'ADMIN') {
-      return notFound()
-    }
-  }, [role, router]);
+
   return (
     <div className="grid h-screen w-full pl-[56px]">
 
