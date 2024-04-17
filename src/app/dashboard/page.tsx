@@ -60,7 +60,7 @@ interface UserWithRatings {
 
 export default function Dashboard() {
   const { role } = useRole();
-  const [usersTotal, setUsersTotal] = useState<number>(0); // Initialize usersTotal as a number
+  const [usersTotal, setUsersTotal] = useState<number>(0); 
   const [userWithRatings, setUserWithRatings] = useState<UserWithRatings>({ totalUsersWithRatings: 0 });
   const router = useRouter() 
 

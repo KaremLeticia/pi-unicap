@@ -8,6 +8,15 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import axios from 'axios';
+import { Ban, Star } from 'lucide-react';
+
+const AlertDialogDemo = ({ message, variant }: { message: string, variant: "default" | "destructive" }) => (
+  <div className={`bg-white rounded border-2 border-slate-900 text-black p-4 fixed bottom-0 right-0 m-4`}>
+    {variant === 'destructive' ? <Ban className="inline-block mr-2" /> : <Star className="inline-block mr-2" />}
+    {message}
+  </div>
+);
+
 
 interface FeedbackModalProps {
   open: boolean;
@@ -40,6 +49,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
 }: FeedbackModalProps) => {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [ratings, setRatings] = useState<any[]>(Array(titles.length).fill(''));
+  const [isFeedbackSent, setIsFeedbackSent] = useState<boolean>(false); // Estado para controlar se a avaliação foi enviada
 
   const handleRatingChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newRatings = [...ratings];
@@ -73,8 +83,9 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
 
       // Exiba a resposta da API no console
       console.log('API response:', response.data);
-
-      // Realize qualquer outra lógica necessária após o envio do feedback
+      setIsFeedbackSent(true); // Define o estado para indicar que a avaliação foi enviada
+      onClose(); // Fecha o modal
+        // Realize qualquer outra lógica necessária após o envio do feedback
 
     } catch (error) {
       // Trate qualquer erro que ocorra durante o envio do feedback
@@ -145,6 +156,7 @@ const handleNextStep = () => {
   };
 
   return (
+    <>
     <Modal
       open={open}
       onClose={onClose}
@@ -182,6 +194,10 @@ const handleNextStep = () => {
         )}
       </Box>
     </Modal>
+     {isFeedbackSent && !open && (
+     <AlertDialogDemo message="AVALIAÇÃO ENVIADA!" variant="default" />
+   )}
+   </>
   );
 };
 
