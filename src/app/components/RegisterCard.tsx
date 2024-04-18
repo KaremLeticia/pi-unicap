@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { BookOpen, BriefcaseMedical, Landmark, Loader2, PenTool, Rocket, Tv, Ban, Star } from "lucide-react"
+import { BookOpen, BriefcaseMedical, Landmark, LoaderCircle, PenTool, Rocket, Tv, Ban, Star } from "lucide-react"
 import { useRouter } from 'next/navigation';
 
 const AlertDialogDemo = ({ message, variant }: { message: string, variant: "default" | "destructive" }) => (
@@ -189,7 +189,7 @@ export function CardsCreateAccount() {
           </div>
        <CardFooter className='flex flex-col'>
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Criar conta"}
+              {loading ? <LoaderCircle className="absolute inset-0 m-auto animate-spin" /> : "Criar conta"}
             </Button>
             <Button onClick={handleBackLogin} variant='ghost'>{'\u00A0'}<span className='underline'>{`${'\n'} Voltar para Login`}</span></Button>
 

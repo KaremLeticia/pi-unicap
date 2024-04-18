@@ -4,13 +4,14 @@ import axios from 'axios';
 import Image from 'next/image';
 import { FormControl } from '@mui/material';
 import { Input } from '@/components/ui/input';
-import logo from '../app/assets/logo.svg';
+import logonew from '../app/assets/logo.svg';
+import logo from '../app/assets/logonew2.png'
 import principal from '../app/assets/principal.png';
 import { useRouter } from "next/navigation";
 import jwt from 'jsonwebtoken'; // Importe jwt para decodificar o token
 import { useUser } from '@/contexts/UserProvider';
 import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
+import { Loader2, LoaderCircle } from 'lucide-react';
 import { useRole } from '@/contexts/RoleContext';
 
 interface LoginResponse {
@@ -66,14 +67,14 @@ export default function Login() {
       <section className="w-full h-screen bg-white md:w-1/2  md:flex ">
         <div className="w-full md:w-1/2 md:pr-4 bg-grayPrincipal p-6 flex flex-col justify-center">
           <Image
-            src={logo}
+            src={logonew}
             alt="logo unicap"
           />
           <FormControl className="space-y-3 mt-4">
             <Input placeholder="E-mail" type="email" value={email} onChange={(e: any) => setEmail(e.target.value)} />
             <Input placeholder="Senha" type="password" value={password} onChange={(e: any) => setPassword(e.target.value)} />
             <button onClick={handleLogin} className="bg-default w-full h-10 rounded self-center hover:bg-default/90 text-white relative">
-              {loading ? <Loader2 className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 h-4 w-4 animate-spin" /> : "Acessar"}
+            {loading ? <LoaderCircle className="absolute inset-0 m-auto animate-spin" /> : "Acessar"}
             </button>
           </FormControl>
           <Button onClick={handleRegister} variant='ghost'>Não possui cadastro?{'\u00A0'}<span className='underline'>{`${'\n'} Cadastre-se`}</span></Button>
