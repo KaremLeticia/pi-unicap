@@ -114,7 +114,7 @@ export default function Home() {
 
   // JSX structure
   return (
-    <div className="h-screen w-screen flex items-center">
+    <div className="">
       <Head>
         <title>Sistema de Avaliação • UNICAP</title>
       </Head>

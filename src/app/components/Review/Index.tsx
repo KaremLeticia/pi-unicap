@@ -1,23 +1,8 @@
 import Image from "next/image"
 import Link from "next/link"
 import {
-  ChevronLeft,
-  ChevronRight,
-  Copy,
-  CreditCard,
-  File,
-  Home,
-  LineChart,
-  ListFilter,
-  MoreVertical,
-  Package,
-  Package2,
-  PanelLeft,
-  Search,
-  Settings,
-  ShoppingCart,
-  Truck,
-  Users2,
+LogOut,
+Router
 } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
@@ -83,6 +68,8 @@ import Loading from "./loading"
 import FeedbackModal from "../FeedbackModal"
 import formatarDataHora from "@/app/utils/Date"
 import Text from "../Text"
+import logo from '../../assets/logo.svg'
+import { useRouter } from "next/navigation"
 
 interface SchoolData {
   name: string;
@@ -116,6 +103,7 @@ export default function ReviewDashboard() {
   const [userSubjects, setUserSubjects] = useState<SubjectData[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [currentSubject, setCurrentSubject] = useState<SubjectData | null>(null);
+  const router = useRouter()
 
   const dataAtual = new Date();
   const dataFormatada = formatarDataHora(dataAtual);
@@ -165,101 +153,108 @@ export default function ReviewDashboard() {
     return <Loading />;
   }
 
+    const handleLogOut = () => {
+      localStorage.removeItem('userToken');
+    };
 
   return (
-    <div className=" flex items-center justify-center">
+      <div className=" flex items-center justify-center">
+        <div className="flex flex-col bg-muted/40 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-full xl:max-w-screen-xl">
+          <div className="flex justify-between">
+          <div>
+          <Text size="2xl" weight="semibold" fontFamily="sans" color="black">
+            Olá, {userData?.name || 'Usuário'}!
 
-      <div className="flex flex-col bg-muted/40">
+          </Text>
+          <Text size="xl" weight="normal" fontFamily="sans" color="black">
+            {dataFormatada}
+          </Text>
+          </div>
+          <Link href="/" onClick={handleLogOut}>
+          <LogOut />
+          </Link>
+          </div>
 
-        <Text size="2xl" weight="semibold" fontFamily="sans" color="black">
-          Olá, {userData?.name || 'Usuário'}!
+          <div className="bg-white mx-auto lg:max-w-screen-lg">
+            {userData && (
+              <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
+                <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
+                  <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
 
-        </Text>
-
-        <Text size="xl" weight="normal" fontFamily="sans" color="black">
-          {dataFormatada}
-
-        </Text>
-        <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
-          {userData && (
-            <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
-              <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
-                <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
-
-                </div>
-                <Tabs defaultValue="week">
-                  <div className="flex items-center">
-
-                    <div className="ml-auto flex items-center gap-2">
-
-                    </div>
                   </div>
-                  <TabsContent value="week">
+                  <Tabs defaultValue="week">
+                    <div className="flex items-center">
 
-                    <Card className="bg-white">
-                      <CardHeader className="px-7">
-                        <CardTitle>Avaliações</CardTitle>
-                        <CardDescription>
-                          Últimas avaliações disponíveis
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <Table>
-                          <TableHeader>
-                            <TableRow>
-                              <TableHead>Matéria</TableHead>
-                              <TableHead className="hidden md:table-cell">
-                                Curso
-                              </TableHead>
-                              <TableHead className="hidden md:table-cell">Avalie</TableHead>
-                              <div>
-                                <TableHead className="text-right flex flex-col">
-                                  Comentário
-                                  <span className="opacity-60">(opcional)</span>
+                      <div className="ml-auto flex items-center gap-2">
+
+                      </div>
+                    </div>
+                    <TabsContent value="week">
+
+                      <Card className="bg-white">
+                        <CardHeader className="px-7">
+                          <CardTitle>Avaliações</CardTitle>
+                          <CardDescription>
+                            Últimas avaliações disponíveis
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <Table>
+                            <TableHeader>
+                              <TableRow>
+                                <TableHead>Matéria</TableHead>
+                                <TableHead className="hidden md:table-cell">
+                                  Curso
                                 </TableHead>
-                              </div>
+                                <TableHead className="hidden md:table-cell">Avalie</TableHead>
+                                <div>
+                                  <TableHead className="text-right flex flex-col">
+                                    Comentário
+                                    <span className="opacity-60">(opcional)</span>
+                                  </TableHead>
+                                </div>
 
-                            </TableRow>
-                          </TableHeader>
+                              </TableRow>
+                            </TableHeader>
 
-                          <TableBody>
-                            {userSubjects.map((subjectGroup, index) => (
-                              <React.Fragment key={index}>
-                                {subjectGroup.Subject.map((subject: any, subIndex: any) => (
-                                  <TableRow key={subIndex}>
-                                    <TableCell>{subject.name}</TableCell>
-                                    <TableCell>{subject.id}</TableCell>
-                                    <TableCell>
-                                      <Button className="bg-default hover:bg-default/90 text-white" onClick={() => handleOpenModal(subject)}>
-                                        Nova avaliação
-                                      </Button>
-                                      <FeedbackModal
-                                        open={modalOpen && currentSubject?.id === subject.id}
-                                        onClose={handleCloseModal}
-                                        onSubmit={(scores) => console.log('Feedback data:', { subjectId: subject.id, userId: userData.id, scores })}
-                                        title={`Avaliação de ${subject.name}`}
-                                        subjectId={subject.id}
-                                        userId={userData.id}
-                                      />
-                                    </TableCell>
-                                  </TableRow>
-                                ))}
-                              </React.Fragment>
-                            ))}
-                          </TableBody>
+                            <TableBody>
+                              {userSubjects.map((subjectGroup, index) => (
+                                <React.Fragment key={index}>
+                                  {subjectGroup.Subject.map((subject: any, subIndex: any) => (
+                                    <TableRow key={subIndex}>
+                                      <TableCell>{subject.name}</TableCell>
+                                      <TableCell>{subject.id}</TableCell>
+                                      <TableCell>
+                                        <Button className="bg-default hover:bg-default/90 text-white" onClick={() => handleOpenModal(subject)}>
+                                          Nova avaliação
+                                        </Button>
+                                        <FeedbackModal
+                                          open={modalOpen && currentSubject?.id === subject.id}
+                                          onClose={handleCloseModal}
+                                          onSubmit={(scores) => console.log('Feedback data:', { subjectId: subject.id, userId: userData.id, scores })}
+                                          title={`Avaliação de ${subject.name}`}
+                                          subjectId={subject.id}
+                                          userId={userData.id}
+                                        />
+                                      </TableCell>
+                                    </TableRow>
+                                  ))}
+                                </React.Fragment>
+                              ))}
+                            </TableBody>
 
-                        </Table>
-                      </CardContent>
-                    </Card>
-                  </TabsContent>
-                </Tabs>
-              </div>
+                          </Table>
+                        </CardContent>
+                      </Card>
+                    </TabsContent>
+                  </Tabs>
+                </div>
 
-            </main>
-          )}
+              </main>
+            )}
+          </div>
         </div>
       </div>
-    </div>
   )
 }
 

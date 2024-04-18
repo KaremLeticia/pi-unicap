@@ -5,6 +5,11 @@ import { House, Bell, Info, ChartPieSlice, GearSix, SignOut, GraduationCap, User
 import Link from "next/link";
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
+const handleLogOut = () => {
+  localStorage.removeItem('userToken');
+};
+
+
 export default function Sidebar() {
   // Verifica se está no lado do cliente antes de acessar o localStorage
   const isAdmin = typeof window !== 'undefined' && localStorage.getItem('userToken');
@@ -47,10 +52,7 @@ export default function Sidebar() {
         </nav>
 
         <div className="flex flex-col justify-end space-y-2">
-          <Link href="home" className="">
-            <GearSix className="text-white" size={32} />
-          </Link>
-          <Link href="/" className="">
+          <Link href="/" className="" onClick={handleLogOut}>
             <SignOut className="text-white" size={32} />
           </Link>
         </div>
