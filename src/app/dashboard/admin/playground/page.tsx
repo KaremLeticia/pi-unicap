@@ -18,16 +18,6 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
-
-import { CodeViewer } from "./components/code-viewer"
-import { MaxLengthSelector } from "./components/maxlength-selector"
-import { ModelSelector } from "./components/model-selector"
-import { PresetActions } from "./components/preset-actions"
-import { PresetSave } from "./components/preset-save"
-import { PresetSelector } from "./components/preset-selector"
-import { PresetShare } from "./components/preset-share"
-import { TemperatureSelector } from "./components/temperature-selector"
-import { TopPSelector } from "./components/top-p-selector"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { Card } from "@/components/ui/card"
