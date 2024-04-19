@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { FormControl } from '@mui/material';
 import { Input } from '@/components/ui/input';
 import logonew from '../app/assets/logo.svg';
-import logo from '../app/assets/logonew2.png'
+import logo from '../app/assets/logo1.png'
 import principal from '../app/assets/principal.png';
 import { useRouter } from "next/navigation";
 import jwt from 'jsonwebtoken'; // Importe jwt para decodificar o token
@@ -44,7 +44,7 @@ export default function Login() {
       localStorage.setItem('userToken', response.data.token);
 
       if (response.data.role === 'ADMIN') {
-        router.push('/dashboard/admin');
+        router.push('/dashboard');
       } else if (response.data.role === 'STUDENT') {
         router.push('/home');
       } else {
@@ -67,8 +67,10 @@ export default function Login() {
       <section className="w-full h-screen bg-white md:w-1/2  md:flex ">
         <div className="w-full md:w-1/2 md:pr-4 bg-grayPrincipal p-6 flex flex-col justify-center">
           <Image
-            src={logonew}
-            alt="logo unicap"
+            src={logo}
+            alt="Logo Unicap Sistema de Avaliação"
+            loading="lazy"	
+            className='p-6'
           />
           <FormControl className="space-y-3 mt-4">
             <Input placeholder="E-mail" type="email" value={email} onChange={(e: any) => setEmail(e.target.value)} />
@@ -82,7 +84,7 @@ export default function Login() {
         <div className="w-full md:w-1/2 mt-4 md:mt-0 flex items-center justify-center">
           <Image
             src={principal}
-            alt="Imagem campus"
+            alt="Fotografia do Campus Recife"
           />
         </div>
       </section>

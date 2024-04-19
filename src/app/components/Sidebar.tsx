@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import LogoUnicap from "../assets/logo-branca-unicap 1.png";
+import logo from '../assets/navbar1.svg'
 import { House, Bell, Info, ChartPieSlice, GearSix, SignOut, GraduationCap, UsersThree, Robot, ChatCenteredText } from "@phosphor-icons/react";
 import Link from "next/link";
 import jwt, { JwtPayload } from 'jsonwebtoken';
@@ -29,8 +29,8 @@ export default function Sidebar() {
       max-sm:hidden
       "
       >
-        <div className="flex justify-center m-2 mb-4">
-          <Image src={LogoUnicap} alt="Logo unicap" />
+        <div className="flex justify-center m-2 mb-4 p-10">
+          <Image src={logo} alt="Logo unicap"/>
         </div>
 
         <nav className="flex flex-col justify-center items-center space-y-6 mb-80">

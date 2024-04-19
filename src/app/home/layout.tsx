@@ -1,14 +1,14 @@
 "use client"
-import logo from '../assets/logo-branca-unicap 1.png'
+import logo from '../assets/navbar1.svg'
 import Image from 'next/image';
 
 
 export default function Layout({ children }: any) {
   return (
     <>
-      <header className="bg-default w-screen h-24 sm:h-20 md:h-24 lg:h-28 xl:h-32 flex  justify-center">
-      <div className="flex justify-center mb-8 mt-8">
-          <Image src={logo} alt="Logo unicap" className='p-1 self-center' />
+      <header className="bg-default w-full h-24 sm:h-20 md:h-24 lg:h-28 xl:h-32 flex justify-center">
+      <div className="flex justify-center p-2">
+          <Image src={logo} alt="Logo unicap" />
         </div>
       </header>
 
