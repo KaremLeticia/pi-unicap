@@ -28,14 +28,15 @@ import { PresetSelector } from "./components/preset-selector"
 import { PresetShare } from "./components/preset-share"
 import { TemperatureSelector } from "./components/temperature-selector"
 import { TopPSelector } from "./components/top-p-selector"
-import { models, types } from "./data/models"
-import { presets } from "./data/presets"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { Card } from "@/components/ui/card"
 import { notFound } from "next/navigation"
 import { useRouter } from "next/navigation"
 import { useRole } from "@/contexts/RoleContext"
+import Text from "@/app/components/Text"
+import { LoaderCircle } from "lucide-react"
+
 
 
 export default function PlaygroundPage() {
@@ -45,10 +46,7 @@ export default function PlaygroundPage() {
 
   const [resultado, setResultado] = useState([]);
   const { role } = useRole();
-  const router = useRouter() 
-
-
-
+  const router = useRouter()
 
   const handleSubmit = async (comentario: string) => {
     try {
@@ -74,7 +72,6 @@ export default function PlaygroundPage() {
     }
     handleSubmit(comentario);
   };
-
 
   return (
     <>
@@ -104,31 +101,28 @@ export default function PlaygroundPage() {
             <div className="grid h-full items-stretch gap-6 md:grid-cols-[1fr_200px]">
               <div className="hidden flex-col space-y-4 sm:flex md:order-2">
                 <div className="grid gap-2">
-
                 </div>
-                <ModelSelector types={types} models={models} />
-                <TemperatureSelector defaultValue={[0.56]} />
-                <MaxLengthSelector defaultValue={[256]} />
-
-                <TopPSelector defaultValue={[0.9]} />
+                <Text weight="semibold" size="lg">Resultado: </Text>
                 <Card className="p-2 bg-white shadow-lg">
-                  {resultado && (
-                    <div>
-                      {resultado.map((item: any, index: number) => (
-                        <div key={index}>
-                          <p>
-                            <span className="text-black font-bold">Resultado:</span>
-                            <span > {item.label}</span>
-                            <br />
-                            <span className="text-black font-bold">Score:</span>
-                            <span> {item.score}</span>
-                          </p>
-                        </div>
-                      ))}
-                    </div>
+                  {loading ? (
+                    <LoaderCircle className="mx-auto mt-4 animate-spin" size={40} />
+                  ) : (
+                    resultado && (
+                      <div>
+                        {resultado.map((item: any, index: number) => (
+                          <div key={index}>
+                            <p>
+                              <span className="text-black font-bold">{item.label}</span>
+                              <br />
+                              <span className="text-black font-bold">Score:</span>
+                              <span> {item.score}</span>
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    )
                   )}
                 </Card>
-
               </div>
               <div className="md:order-1">
                 <TabsContent value="complete" className="mt-0 border-0 p-0">
@@ -191,12 +185,7 @@ export default function PlaygroundPage() {
                     </div>
                     <div className="flex items-center space-x-2">
                       <Button>Submit</Button>
-                      <Button variant="secondary">
-                        <span className="sr-only">Show history</span>
-                        <CounterClockwiseClockIcon className="h-4 w-4" />
-                      </Button>
                     </div>
-
                   </div>
                 </TabsContent>
               </div>

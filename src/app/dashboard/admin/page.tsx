@@ -53,219 +53,118 @@ import {
 } from "@/components/ui/tooltip"
 import { useRole } from "@/contexts/RoleContext"
 import { notFound, useRouter } from "next/navigation"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+import axios from 'axios';
 
 export default function Admin() {
-  const { role } = useRole();
-  const router = useRouter() 
+  const [courseName, setCourseName] = useState('');
+  const [schoolId, setSchoolId] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [subjectName, setSubjectName] = useState('');
+  const [courseIdForSubject, setCourseIdForSubject] = useState('');
+  const [loadingSubject, setLoadingSubject] = useState(false);
+  const [errorSubject, setErrorSubject] = useState('');
+
+
+  const handleSubmitNewCourse = async (e: any) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      console.log('Sending request to create new course:', { name: courseName, schoolId: schoolId });
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_PROD_BASE_URL}/admin/courses`, {
+        name: courseName,
+        schoolId: schoolId
+      });
+      console.log('Response:', response.data);
+      // Limpar os campos após o envio bem-sucedido
+      setCourseName('');
+      setSchoolId('');
+      setError('');
+    } catch (error) {
+      console.error('Error creating course:', error);
+      setError('Erro ao criar o curso. Por favor, tente novamente.');
+    }
+    setLoading(false);
+  };
+
+  const handleSubmitNewSubject = async (e: any) => {
+    e.preventDefault();
+    setLoadingSubject(true);
+    try {
+      console.log('Sending request to create new subject:', { name: subjectName, courseId: courseIdForSubject });
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_PROD_BASE_URL}/admin/subjects`, {
+        name: subjectName,
+        courseId: courseIdForSubject
+      });
+      console.log('Response:', response.data);
+      // Limpar os campos após o envio bem-sucedido
+      setSubjectName('');
+      setCourseIdForSubject('');
+      setErrorSubject('');
+    } catch (error) {
+      console.error('Error creating subject:', error);
+      setErrorSubject('Erro ao criar a matéria. Por favor, tente novamente.');
+    }
+    setLoadingSubject(false);
+  };
 
 
   return (
     <div className="grid h-screen w-full pl-[56px]">
-
       <div className="flex flex-col">
-
         <main className="grid flex-1 gap-4 overflow-auto p-4 md:grid-cols-2 lg:grid-cols-3">
           <div className="relative hidden flex-col items-start gap-8 md:flex">
             <form className="grid w-full items-start gap-6">
               <fieldset className="grid gap-6 rounded-lg border p-4">
                 <legend className="-ml-1 px-1 text-sm font-medium">
-                  Adicionar novo curso
+                  Criar nova escola
                 </legend>
                 <div className="grid gap-3">
-                  <Label htmlFor="model">Escola</Label>
-                  <Select>
-                    <SelectTrigger
-                      id="model"
-                      className="items-start [&_[data-description]]:hidden"
-                    >
-                      <SelectValue placeholder="Selecione uma escola" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-white">
-                      <SelectItem value="Icam-tech">
-                        <div className="flex items-start gap-3 text-muted-foreground">
-                          <Rocket className="size-5" />
-                          <div className="grid gap-0.5">
-                            <span className="font-medium text-foreground">
-                              Icam-tech
-                            </span>
-                          </div>
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="Comunicação">
-                        <div className="flex items-start gap-3 text-muted-foreground">
-                          <Tv className="size-5" />
-                          <div className="grid gap-0.5">
-                            <span className="font-medium text-foreground">
-                              Comunicação
-                            </span>
-                          </div>
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="Ciências Jurídicas">
-                        <div className="flex items-start gap-3 text-muted-foreground">
-                          <PenTool className="size-5" />
-                          <div className="grid gap-0.5">
-                            <span className="font-medium text-foreground">
-                              Ciências Jurídicas
-                            </span>
-                          </div>
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="Educação e Humanidades">
-                        <div className="flex items-start gap-3 text-muted-foreground">
-                          <BookOpen className="size-5" />
-                          <div className="grid gap-0.5">
-                            <span className="font-medium text-foreground">
-                              Educação e Humanidades
-                            </span>
-                          </div>
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="Gestão, Economia e Política">
-                        <div className="flex items-start gap-3 text-muted-foreground">
-                          <Landmark className="size-5" />
-                          <div className="grid gap-0.5">
-                            <span className="font-medium text-foreground">
-                              Gestão, Economia e Política
-                            </span>
-                          </div>
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="Saúde e Ciências da Vida">
-                        <div className="flex items-start gap-3 text-muted-foreground">
-                          <BriefcaseMedical className="size-5" />
-                          <div className="grid gap-0.5">
-                            <span className="font-medium text-foreground">
-                              Saúde e Ciências da Vida
-                            </span>
-                          </div>
-                        </div>
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Label htmlFor="schoolName">Nome da matéria</Label>
+                  <Input disabled id="schoolName" type="text" placeholder="Ex: Centro de Artes Visuais" />
                 </div>
-                <div className="grid gap-3">
-                  <Label htmlFor="courseName">Nome do curso</Label>
-                  <Input id="courseName" type="text" placeholder="Ex: Sistemas para Internet" />
-                </div>
+              </fieldset>
+              <fieldset className="grid gap-6 rounded-lg border p-4">
+                <legend className="-ml-1 px-1 text-sm font-medium">
+                  Adicionar novo curso
+                </legend>
 
+                <div className="grid gap-3">
+                  <Label htmlFor="schoolId">ID da escola</Label>
+                  <Input id="schoolID" type="text" placeholder="Ex: Sistemas para Internet" value={schoolId}
+                    onChange={(e: any) => setSchoolId(e.target.value)}
+                  />
+                  <Label htmlFor="courseName">Nome do curso</Label>
+                  <Input id="courseName" type="text" placeholder="Ex: Sistemas para Internet" value={courseName}
+                    onChange={(e: any) => setCourseName(e.target.value)}
+                  />
+                </div>
+                <Button onClick={handleSubmitNewCourse} disabled={loading}>
+                  {loading ? 'Enviando...' : 'Adicionar Curso'}
+                </Button>
+                {error && <p className="text-red-500">{error}</p>}
               </fieldset>
               <fieldset className="grid gap-6 rounded-lg border p-4">
                 <legend className="-ml-1 px-1 text-sm font-medium">
                   Adicionar nova matéria
                 </legend>
                 <div className="grid gap-3">
-                  <Label htmlFor="model">Escola</Label>
-                  <Select>
-                    <SelectTrigger
-                      id="model"
-                      className="items-start [&_[data-description]]:hidden"
-                    >
-                      <SelectValue placeholder="Selecione uma escola" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-white">
-                      <SelectItem value="Icam-tech">
-                        <div className="flex items-start gap-3 text-muted-foreground">
-                          <Rocket className="size-5" />
-                          <div className="grid gap-0.5">
-                            <span className="font-medium text-foreground">
-                              Icam-tech
-                            </span>
-                          </div>
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="Comunicação">
-                        <div className="flex items-start gap-3 text-muted-foreground">
-                          <Tv className="size-5" />
-                          <div className="grid gap-0.5">
-                            <span className="font-medium text-foreground">
-                              Comunicação
-                            </span>
-                          </div>
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="Ciências Jurídicas">
-                        <div className="flex items-start gap-3 text-muted-foreground">
-                          <PenTool className="size-5" />
-                          <div className="grid gap-0.5">
-                            <span className="font-medium text-foreground">
-                              Ciências Jurídicas
-                            </span>
-                          </div>
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="Educação e Humanidades">
-                        <div className="flex items-start gap-3 text-muted-foreground">
-                          <BookOpen className="size-5" />
-                          <div className="grid gap-0.5">
-                            <span className="font-medium text-foreground">
-                              Educação e Humanidades
-                            </span>
-                          </div>
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="Gestão, Economia e Política">
-                        <div className="flex items-start gap-3 text-muted-foreground">
-                          <Landmark className="size-5" />
-                          <div className="grid gap-0.5">
-                            <span className="font-medium text-foreground">
-                              Gestão, Economia e Política
-                            </span>
-                          </div>
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="Saúde e Ciências da Vida">
-                        <div className="flex items-start gap-3 text-muted-foreground">
-                          <BriefcaseMedical className="size-5" />
-                          <div className="grid gap-0.5">
-                            <span className="font-medium text-foreground">
-                              Saúde e Ciências da Vida
-                            </span>
-                          </div>
-                        </div>
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Label htmlFor="courseIdForSubject">ID do Curso</Label>
+                  <Input id="courseIdForSubject" type="text" placeholder="Ex: 123456" value={courseIdForSubject}
+                    onChange={(e: any) => setCourseIdForSubject(e.target.value)}
+                  />
+                  <Label htmlFor="subjectName">Nome da matéria</Label>
+                  <Input id="subjectName" type="text" placeholder="Ex: Introdução a Programação" value={subjectName}
+                    onChange={(e: any) => setSubjectName(e.target.value)}
+                  />
                 </div>
-                <div className="grid gap-3">
-                  <Label htmlFor="school">Escola</Label>
-                  <Select>
-                    <SelectTrigger
-                      id="course"
-                      className="items-start [&_[data-description]]:hidden"
-                    >
-                      <SelectValue placeholder="Selecione um curso" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-white">
-                      <SelectItem value="Icam-tech">
-                        <div className="flex items-start gap-3 text-muted-foreground">
-                          <Rocket className="size-5" />
-                          <div className="grid gap-0.5">
-                            <span className="font-medium text-foreground">
-                              Icam-tech
-                            </span>
-                          </div>
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="Comunicação">
-                        <div className="flex items-start gap-3 text-muted-foreground">
-                          <Tv className="size-5" />
-                          <div className="grid gap-0.5">
-                            <span className="font-medium text-foreground">
-                              Comunicação
-                            </span>
-                          </div>
-                        </div>
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="grid gap-3">
-                  <Label htmlFor="courseName">Nome da matéria</Label>
-                  <Input id="courseName" type="text" placeholder="Ex: Introdução a Programação" />
-                </div>
+                <Button onClick={handleSubmitNewSubject} disabled={loadingSubject}>
+                  {loadingSubject ? 'Enviando...' : 'Adicionar Matéria'}
+                </Button>
+                {errorSubject && <p className="text-red-500">{errorSubject}</p>}
               </fieldset>
+
 
               <fieldset className="grid gap-6 rounded-lg border p-4">
                 <legend className="-ml-1 px-1 text-sm font-medium">

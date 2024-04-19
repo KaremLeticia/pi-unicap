@@ -10,7 +10,6 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { OrderTableRow } from './order-table-row';
-import { OrderTableFilters } from './order-table-filters';
 import { Pagination } from '@/components/ui/pagination';
 import { format } from 'date-fns';
 import { notFound, useRouter } from 'next/navigation';
@@ -52,7 +51,6 @@ export default function Orders() {
       <div className="flex flex-col gap-4">
         <h1 className="text-3xl font-bold tracking-tight">Alunos Cadastrados</h1>
         <div className="space-y-2.5">
-          <OrderTableFilters />
 
           <div className="border rounded-md">
             <Table>
