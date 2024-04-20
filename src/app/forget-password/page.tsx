@@ -29,7 +29,7 @@ export default function ForgetPassword() {
 
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
+  const [alertMessage, setAlertMessage] = useState<{ message: any } | null>(null);
   const [alertVariant, setAlertVariant] = useState<'default' | 'destructive'>('default');
   const router = useRouter();
 
@@ -48,11 +48,11 @@ export default function ForgetPassword() {
 
       // Handle response
       console.log(response.data);
-      setAlertMessage(response.data);
+      setAlertMessage({ message: response.data.message });
       setAlertVariant('default');
     } catch (error) {
       console.error('Error:', error);
-      setAlertMessage('Erro ao processar solicitação.');
+      setAlertMessage({ message: 'Erro ao processar solicitação.' });
       setAlertVariant('destructive');
     } finally {
       setLoading(false);
