@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import { Lock, Person } from '@mui/icons-material';
 import principal from '../../app/assets/principal.png';
-import logo from '../../app/assets/logo.svg';
+import logo from '../../app/assets/logo1.png';
 import { FormControl } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/contexts/UserProvider";
