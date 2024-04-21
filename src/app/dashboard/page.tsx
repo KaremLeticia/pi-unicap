@@ -52,6 +52,10 @@ import jwt from 'jsonwebtoken'; // Importe jwt para decodificar o token
 import Admin from "../page"
 import { useRole } from "@/contexts/RoleContext"
 import { notFound, useRouter } from "next/navigation"
+import { RevenueChart } from "../components/Charts/Revenue-Chart"
+import { StatsBar } from "../components/Charts/StatsBar"
+import { CoursePerform } from "../components/Charts/CoursePerform"
+import { MetricsTable } from "../components/Charts/MetricsTable"
 
 interface UserWithRatings {
   totalUsersWithRatings: any;
@@ -60,9 +64,9 @@ interface UserWithRatings {
 
 export default function Dashboard() {
   const { role } = useRole();
-  const [usersTotal, setUsersTotal] = useState<number>(0); 
+  const [usersTotal, setUsersTotal] = useState<number>(0);
   const [userWithRatings, setUserWithRatings] = useState<UserWithRatings>({ totalUsersWithRatings: 0 });
-  const router = useRouter() 
+  const router = useRouter()
 
   useEffect(() => {
     const fetchUsersTotal = async () => {
@@ -144,6 +148,13 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         </div>
+        <div className="space-y-2">
+            <CoursePerform />
+            <UsersBySchoolChart />
+            <RevenueChart />
+            <StatsBar />
+            <MetricsTable />
+          </div>
         <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
           <Card className="xl:col-span-2">
             <CardHeader className="flex flex-row items-center">
@@ -282,7 +293,8 @@ export default function Dashboard() {
               </Table>
             </CardContent>
           </Card>
-          <UsersBySchoolChart />
+
+
           <Card>
             <CardHeader>
               <CardTitle>Recent Sales</CardTitle>
