@@ -24,7 +24,7 @@ export default function Orders() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_PROD_BASE_URL}/admin/getuserdetails`, {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_PROD_BASE_URL}/admin/getusersall`, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('userToken')}`,
             'Content-Type': 'application/json'
@@ -67,7 +67,6 @@ export default function Orders() {
               </TableHeader>
               <TableBody>
                 {users.map((user, index) => {
-                  const formattedCreatedAt = format(new Date(user.createdAt), 'dd/MM/yyyy HH:mm:ss');
 
                   return (
                     <OrderTableRow
@@ -78,7 +77,6 @@ export default function Orders() {
                       surname={user.surname}
                       studentRegister={user.studentRegister}
                       role={user.role}
-                      createdAt={formattedCreatedAt} // Data formatada
                       school={user.school.name}
                       accountAge={user.accountAge}
                     />
