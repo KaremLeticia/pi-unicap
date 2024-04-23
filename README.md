@@ -1,30 +1,33 @@
 
-# 💻 Sistema de Avaliação • UNICAP
+# 💻 Sistema de Avaliação • UNICAP 2.0 
 #### ⚠ Em desenvolvimento
 
-Projeto da disciplina de Projeto Integrador IV lecionada pelo Prof. Iago Rodrigues, o software busca solucionar pendências da comissão de avaliação da Universidade Católica de Pernambuco.
-
+Projeto da disciplina de Projeto Integrador V anteriormente lecionada pelo Professor Iago Rodrigues e atualmente lecionada pelo Professor Daniel Bezerra, o software busca mitigar e atenuar pendências da comissão de avaliação [CPA] da Universidade Católica de Pernambuco.
 
 
 ## ⚛  Stack utilizadas
 
 **Front-end:** Next.js, TailwindCSS
 
-**Back-end:** Node, Express, Prisma e Postgresql
+**Back-end:** Node, Fastify, Prisma, Postgresql, FastAPI e HuggingFace.
 
 ## ⚙ Features
 
-- [x]  Login de usuário
-- [ ]  Home 
-- [ ]  Chatbot based on ChatGPT 3.5 Turbo
-- [ ]  Dashboard
-- [ ]  Relatórios
+- ✅ Login 
+- ✅ Cadastro 
+- ✅ Esqueci minha senha com e-mail 
+- ✅ Dashboard 
+- ✅ Inteligência Artificial de Análise de Sentimentos dos comentários 
+- ✅ Painel de criação de novas escolas, cursos, matérias e manutenção e controle de alunos 
+- 🟩 Relatório 
+- ✅ Rebranding UI/UX 
+
 ## 🖥 Rodando localmente
 
 Clone o projeto
 
 ```bash
-  git clone https://link-para-o-projeto
+  git clone https://github.com/athospugliesedev/pi-unicap
 ```
 
 Entre no diretório do projeto
