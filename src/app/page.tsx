@@ -60,8 +60,12 @@ export default function Login() {
   const handleRegister = async () => {
     router.push('/register');
   }
-  
-  
+
+  const handlePassword = async () => {
+    router.push('/forget-password');
+  }
+
+
   return (
     <main className="bg-gray-200 flex justify-center items-center h-screen">
       <section className="w-full h-screen bg-white md:w-1/2  md:flex ">
@@ -69,17 +73,38 @@ export default function Login() {
           <Image
             src={logo}
             alt="Logo Unicap Sistema de Avaliação"
-            loading="lazy"	
+            loading="lazy"
             className='p-6'
           />
+          <div className='space-y-2'>
+            <h1 className="text-2xl font-semibold">Novo aluno?</h1>
+            <p className=''>Crie uma conta com e-mail</p>
+            <button onClick={handleRegister} className="bg-default w-full h-10 rounded self-center hover:bg-default/90 text-white relative">
+              {loading ? <LoaderCircle className="absolute inset-0 m-auto animate-spin" /> : "Criar conta"}
+            </button>
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-grayPrincipal px-2 text-muted-foreground">
+                    Ou continue com
+                  </span>
+                </div>
+              </div>
+          </div>
+          <h1 className="text-2xl font-semibold">Login</h1>
+
           <FormControl className="space-y-3 mt-4">
             <Input placeholder="E-mail" type="email" value={email} onChange={(e: any) => setEmail(e.target.value)} />
             <Input placeholder="Senha" type="password" value={password} onChange={(e: any) => setPassword(e.target.value)} />
             <button onClick={handleLogin} className="bg-default w-full h-10 rounded self-center hover:bg-default/90 text-white relative">
-            {loading ? <LoaderCircle className="absolute inset-0 m-auto animate-spin" /> : "Acessar"}
+              {loading ? <LoaderCircle className="absolute inset-0 m-auto animate-spin" /> : "Acessar"}
             </button>
           </FormControl>
-          <Button onClick={handleRegister} variant='ghost'>Não possui cadastro?{'\u00A0'}<span className='underline'>{`${'\n'} Cadastre-se`}</span></Button>
+          <Button onClick={handlePassword} variant='ghost'>Esqueci minha senha{'\u00A0'}</Button>
+
+          {/* <Button onClick={handleRegister} variant='ghost'>Não possui cadastro?{'\u00A0'}<span className='underline'>{`${'\n'} Cadastre-se`}</span></Button> */}
         </div>
         <div className="w-full md:w-1/2 mt-4 md:mt-0 flex items-center justify-center">
           <Image
