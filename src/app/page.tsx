@@ -64,7 +64,6 @@ export default function Login() {
 
   const handlePassword = async () => {
     router.push('/forget-password');
-    setLoadingtwo(true)
   }
 
 
@@ -82,7 +81,7 @@ export default function Login() {
             <h1 className="text-2xl font-semibold">Novo aluno?</h1>
             <p className=''>Crie uma conta com e-mail</p>
             <button onClick={handleRegister} className="bg-default w-full h-10 rounded self-center hover:bg-default/90 text-white relative">
-              {loadingtwo ? <LoaderCircle className="absolute inset-0 m-auto animate-spin" /> : "Criar conta"}
+              Criar conta
             </button>
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
