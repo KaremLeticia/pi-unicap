@@ -140,7 +140,8 @@ export default function ReviewDashboard() {
           return;
         }
 
-        const subjectsResponse = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_PROD_BASE_URL}/users/subjectsbyuser/${userId}`);
+        // const subjectsResponse = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_PROD_BASE_URL}/users/subjectsbyuser/${userId}`);
+        const subjectsResponse = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_PROD_BASE_URL}/users/subjects-filtered-by-order/${userId}`);
         const userSubjectsData: SubjectData[] = subjectsResponse.data;
         setUserSubjects(userSubjectsData);
       } catch (error) {
