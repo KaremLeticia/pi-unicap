@@ -52,10 +52,10 @@ export function StatsBar() {
   return (
     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-2">
       {/* Card para exibir a distribuição de classificações */}
-      <Card>
+      <Card className="col-span-6">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-base font-medium">
-          Distribuição de Classificações          </CardTitle>
+            Distribuição de Classificações          </CardTitle>
           <CardDescription className="text-base font-medium">Média: {averageRating.toFixed(2)}</CardDescription>
         </CardHeader>
         <CardContent>
