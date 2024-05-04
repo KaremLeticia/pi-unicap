@@ -14,16 +14,16 @@ import ReviewDashboard from "../components/Review/Index";
 import Loading from "../components/Review/loading";
 
 const titles = [
-  "1.0 Qual matéria",
-  "1.1 Foi assídua e pontual.",
-  "1.2 Demonstrou conhecimento atualizado e domínio do conteúdo das disciplinas.",
-  "1.3 Promoveu a integração da teoria com a prática.",
-  "1.4 Demonstrou conhecimento atualizado e domínio do conteúdo das disciplinas.",
-  "1.5 Demonstrou clareza na exposição do conteúdo das disciplinas.",
-  "1.6 Utilizou metodologias inovadoras ativas.",
-  "1.7 Utilizou recursos adequados ao ensino das disciplinas.",
-  "1.8 Apresentou avaliações coerentes com os conteúdos ministrados.",
-  "1.9 Apresentou um bom relacionamento com a turma e proporcionou um clima de respeito mútuo e ético.",
+  "Qual matéria",
+  "Foi assídua e pontual.",
+  "Demonstrou conhecimento atualizado e domínio do conteúdo das disciplinas.",
+  "Promoveu a integração da teoria com a prática.",
+  "Demonstrou conhecimento atualizado e domínio do conteúdo das disciplinas.",
+  "Demonstrou clareza na exposição do conteúdo das disciplinas.",
+  "Utilizou metodologias inovadoras ativas.",
+  "Utilizou recursos adequados ao ensino das disciplinas.",
+  "Apresentou avaliações coerentes com os conteúdos ministrados.",
+  "Apresentou um bom relacionamento com a turma e proporcionou um clima de respeito mútuo e ético.",
 ];
 
 const questions = [
