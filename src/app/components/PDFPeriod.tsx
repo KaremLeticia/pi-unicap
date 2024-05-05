@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Button } from '@/components/ui/button';
 import { FileDown } from 'lucide-react';
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 const DownloadPDFPeriod = () => {
   const [periodId, setPeriodId] = useState('');
@@ -48,8 +50,8 @@ const DownloadPDFPeriod = () => {
         Relatório por período
       </legend>
       <div className="grid gap-3">
-        <label htmlFor="periodId" className="block text-sm font-medium text-gray-700">ID do período</label>
-        <input id="periodId" type="text" placeholder="Ex: 123456" value={periodId}
+        <Label htmlFor="periodId" className="block text-sm font-medium text-gray-700">ID do período</Label>
+        <Input id="periodId" type="text" placeholder="Ex: 123456" value={periodId}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPeriodId(e.target.value)}
           className="border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300"
         />
