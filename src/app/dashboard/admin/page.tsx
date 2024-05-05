@@ -55,6 +55,7 @@ import { useRole } from "@/contexts/RoleContext"
 import { notFound, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import axios from 'axios';
+import DownloadPDFPeriod from "@/app/components/PDFPeriod"
 
 export default function Admin() {
   const [courseName, setCourseName] = useState('');
@@ -65,6 +66,9 @@ export default function Admin() {
   const [courseIdForSubject, setCourseIdForSubject] = useState('');
   const [loadingSubject, setLoadingSubject] = useState(false);
   const [errorSubject, setErrorSubject] = useState('');
+  const [loadingPeriod, setLoadingPeriod] = useState(false);
+  const [periodId, setPeriodId] = useState('');
+  const [errorPeriod, setErrorPeriod] = useState('');
 
 
   const handleSubmitNewCourse = async (e: any) => {
@@ -109,6 +113,55 @@ export default function Admin() {
     setLoadingSubject(false);
   };
 
+  const handleSubmitPeriod = async (e: any) => {
+    e.preventDefault();
+    setLoadingPeriod(true);
+    try {
+      console.log('Sending request to generate PDF for period:', { periodId });
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_PROD_BASE_URL}/admin/capturedata/${periodId}`, {
+        periodId: periodId
+      });
+      console.log('Response:', response.data);
+      // Limpar os campos após o envio bem-sucedido
+      setPeriodId('');
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      setErrorPeriod('Erro ao gerar relatório. Por favor, tente novamente.');
+    }
+    setLoadingPeriod(false);
+  };
+
+    const handleDownloadPDF = async (e: any) => {
+      setLoadingPeriod(true);
+
+      try {
+        const token = localStorage.getItem('userToken');
+        const headers = {
+          'Authorization': `Bearer ${token}`,
+        };
+
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_PROD_BASE_URL}/admin/getdata/${periodId}`, {
+          headers: headers,
+          responseType: 'blob', // Indica que a resposta será um blob (arquivo)
+        });
+
+        // Cria uma URL temporária para o objeto Blob
+        const url = window.URL.createObjectURL(response.data);
+
+        // Cria um link de download
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `rating_metrics_period_${periodId}.pdf`);
+
+        // Dispara o clique automaticamente para iniciar o download
+        link.click();
+
+        // Revoga a URL temporária
+        window.URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error('Erro ao baixar o PDF:', error);
+      }
+    };
 
   return (
     <div className="grid h-screen w-full pl-[56px]">
@@ -162,83 +215,30 @@ export default function Admin() {
                 <Button onClick={handleSubmitNewSubject} disabled={loadingSubject}>
                   {loadingSubject ? 'Enviando...' : 'Adicionar Matéria'}
                 </Button>
-                {errorSubject && <p className="text-red-500">{errorSubject}</p>}
+                {errorPeriod && <p className="text-red-500">{errorPeriod}</p>}
               </fieldset>
 
-
-              <fieldset className="grid gap-6 rounded-lg border p-4">
-                <legend className="-ml-1 px-1 text-sm font-medium">
-                  Messages
-                </legend>
-                <div className="grid gap-3">
-                  <Label htmlFor="role">Role</Label>
-                  <Select defaultValue="system">
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a role" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="system">System</SelectItem>
-                      <SelectItem value="user">User</SelectItem>
-                      <SelectItem value="assistant">Assistant</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="grid gap-3">
-                  <Label htmlFor="content">Content</Label>
-                  <Textarea
-                    id="content"
-                    placeholder="You are a..."
-                    className="min-h-[9.5rem]"
-                  />
-                </div>
-              </fieldset>
             </form>
           </div>
-          <div className="relative flex h-full min-h-[50vh] flex-col rounded-xl bg-muted/50 p-4 lg:col-span-2">
-            <Badge variant="outline" className="absolute right-3 top-3">
-              Output
-            </Badge>
-            <div className="flex-1" />
-            <form className="relative overflow-hidden rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring">
-              <Label htmlFor="message" className="sr-only">
-                Message
-              </Label>
-              <Textarea
-                id="message"
-                placeholder="Type your message here..."
-                className="min-h-12 resize-none border-0 p-3 shadow-none focus-visible:ring-0"
-              />
-              <div className="flex items-center p-3 pt-0">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button variant="ghost" size="icon">
-                        <Paperclip className="size-4" />
-                        <span className="sr-only">Attach file</span>
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent side="top">Attach File</TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                <TooltipProvider>
+          <div className="relative flex h-full min-h-[50vh] flex-col rounded-xl bg-muted/50  lg:col-span-2">
+            {/* <fieldset className="grid gap-6 rounded-lg border p-4">
+              <legend className="-ml-1 px-1 text-sm font-medium">
+                Relatório por período
+              </legend>
+              <div className="grid gap-3">
+                <Label htmlFor="periodId">ID do período</Label>
+                <Input id="periodId" type="text" placeholder="Ex: 123456" value={periodId}
+                  onChange={(e: any) => setPeriodId(e.target.value)}
+                />
 
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button variant="ghost" size="icon">
-                        <Mic className="size-4" />
-                        <span className="sr-only">Use Microphone</span>
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent side="top">Use Microphone</TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-
-                <Button type="submit" size="sm" className="ml-auto gap-1.5">
-                  Send Message
-                  <CornerDownLeft className="size-3.5" />
-                </Button>
               </div>
-            </form>
+              <Button onClick={handleDownloadPDF} disabled={loadingPeriod}>
+                {loadingSubject ? 'Enviando...' : 'Gerar relatório'}
+              </Button>
+              {errorSubject && <p className="text-red-500">{errorSubject}</p>}
+            </fieldset> */}
+            <DownloadPDFPeriod />
+            <div className="flex-1" />
           </div>
         </main>
       </div>
