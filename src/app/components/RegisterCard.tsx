@@ -61,7 +61,7 @@ export function CardsCreateAccount() {
     try {
       setLoading(true);
       const updatedFormData = { ...formData, school: selectedSchool };
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_PROD_BASE_URL}/users/register`, updatedFormData);
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_PROD_BASE_URL}/users/create-account`, updatedFormData);
       setLoading(false);
       console.log('Resposta da API:', response.data);
         setAlertMessage("Conta criada, faça login!");      
